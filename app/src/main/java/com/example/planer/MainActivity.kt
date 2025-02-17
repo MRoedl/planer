@@ -27,12 +27,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var db: PlanerDatabase
+    lateinit var insertMealPlan: kotlinx.coroutines.Job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        db = Room.databaseBuilder(this, PlanerDatabase::class.java, "meal_database").build()
+        Room.databaseBuilder(this, PlanerDatabase::class.java, "meal_database").build()
         calcMealPlan()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
     fun calcMealPlan() {
         val planerDao: PlanerDao = PlanerDatabase.getDatabase(this).planerDao()
 
-        lifecycleScope.launch {
+        insertMealPlan = lifecycleScope.launch {
 //            planerDao.deleteAllMeals()
             planerDao.deleteMealPlan()
 

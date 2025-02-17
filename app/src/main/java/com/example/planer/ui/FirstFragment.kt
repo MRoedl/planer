@@ -20,8 +20,10 @@ import com.example.planer.database.PlanerDao
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.database.MealEntity
 import com.example.planer.database.MealPlanEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -147,6 +149,9 @@ class FirstFragment : Fragment() {
         val planerDao: PlanerDao = PlanerDatabase.getDatabase(requireContext()).planerDao()
 
         lifecycleScope.launch {
+            val mainActivity = requireActivity() as MainActivity
+            mainActivity.insertMealPlan.join()
+
             val mealPlan: List<MealPlanEntity>? = planerDao.getMealPlan()
 
             if (mealPlan != null) {
@@ -158,8 +163,17 @@ class FirstFragment : Fragment() {
             }
             binding.progressBar.visibility = View.GONE
             binding.containerForDynamicRows.visibility = View.VISIBLE
-
         }
+
+//        lifecycleScope.launch {
+//            planerDao.getMealPlan().collect { mealPlan ->
+//                binding.progressBar.visibility = View.GONE
+//                binding.containerForDynamicRows.visibility = View.VISIBLE
+//
+//                createRows(mealPlan)
+//            }
+//
+//        }
 
     }
 
