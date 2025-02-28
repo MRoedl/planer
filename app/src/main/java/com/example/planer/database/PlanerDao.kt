@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -24,6 +25,9 @@ interface PlanerDao {
 
     @Query("SELECT * FROM meals_table WHERE id = :id")
     suspend fun getMealById(id: Int): MealEntity
+
+    @Update
+    suspend fun updateMeal(meal: MealEntity)
 
     // MealPlan_Table
     @Insert

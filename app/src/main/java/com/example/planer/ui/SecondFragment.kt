@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.example.planer.ViewModel.MealViewModel
 import com.example.planer.database.PlanerDao
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.database.MealEntity

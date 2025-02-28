@@ -36,6 +36,11 @@ import java.util.Locale
  */
 class FirstFragment : Fragment() {
 
+    // todo: Plan bearbeiten / Gerichte austauschen, verschieben
+    // Verlauf von Gerichten
+    // Statistiken zu Gerichten (wie oft, Wert / Prozentual)
+    // Algo für Plan erstellung anpassen (Wochentage, gewichtung für Wahrscheinlichkeit)
+
     private var _binding: FragmentFirstBinding? = null
 
     // This property is only valid between onCreateView and

@@ -134,4 +134,11 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="meal_list">Meal List</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="gericht">Gericht</string>
+    <string name="name">Name</string>
+    <string name="kategorie">Kategorie</string>
+    <string name="zutaten">Zutaten</string>
+    <string name="infos">Infos</string>
 </resources>
