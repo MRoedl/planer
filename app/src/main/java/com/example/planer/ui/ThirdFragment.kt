@@ -57,6 +57,9 @@ class ThirdFragment : Fragment() {
 
             if (meals != null && meals.isNotEmpty()) {
                 for (meal in meals) {
+                    var rowLinearLayout = LinearLayout(requireContext())
+                    rowLinearLayout.orientation = LinearLayout.HORIZONTAL
+
                     // 1. Erstelle die TextView
                     val textView = TextView(requireContext())
                     textView.setPadding(50, 20, 20, 20)
@@ -64,22 +67,24 @@ class ThirdFragment : Fragment() {
                     textView.text = meal.name
 
                     // 2. Füge die TextView zum Container hinzu
-                    binding.container.addView(textView)
+                    rowLinearLayout.addView(textView)
 
                     // 3. Erstelle Button
-                    val button = Button(requireContext())
+                    var button = Button(requireContext())
                     button.text = "Edit"
                     button.id = meal.id
                     button.tag = "meals"
 
                     // 4. Füge den Button zum Container hinzu
-                    binding.container.addView(button)
+                    rowLinearLayout.addView(button)
+                    binding.container.addView(rowLinearLayout)
+
+                    binding.container.findViewById<Button>(button.id).setOnClickListener { btn ->
+                        viewModel.mealId = btn.id
+                        findNavController().navigate(R.id.action_ThirdFragment_to_EditMealFragment)
+                    }
                 }
 
-                binding.container.findViewWithTag<Button>("meals").setOnClickListener { btn ->
-                    viewModel.mealId = btn.id
-                    findNavController().navigate(R.id.action_ThirdFragment_to_EditMealFragment)
-                }
             }
 
         }
