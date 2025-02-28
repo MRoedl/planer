@@ -23,6 +23,9 @@ interface PlanerDao {
     @Query("DELETE FROM meals_table")
     suspend fun deleteAllMeals()
 
+    @Query("DELETE FROM meals_table WHERE id = :id")
+    suspend fun deleteMealById(id: Int)
+
     @Query("SELECT * FROM meals_table WHERE id = :id")
     suspend fun getMealById(id: Int): MealEntity
 

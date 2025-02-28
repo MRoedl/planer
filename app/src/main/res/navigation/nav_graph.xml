@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_ThirdFragment_to_EditMealFragment"
             app:destination="@id/EditMealFragment" />
+        <action
+            android:id="@+id/action_ThirdFragment_to_self"
+            app:destination="@id/ThirdFragment" />
     </fragment>
     <fragment
         android:id="@+id/EditMealFragment"

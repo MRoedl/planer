@@ -30,8 +30,8 @@ import kotlin.getValue
 
 class ThirdFragment : Fragment() {
 
-    // todo: Btn für Gerichte hinzufügen hier einfügen
-    // Meal Liste bearbeiten / löschen
+    // todo:
+    // Meal Liste löschen
 
     private var _binding: FragmentThirdBinding? = null
     private val binding get() = _binding!!
@@ -56,6 +56,7 @@ class ThirdFragment : Fragment() {
             val meals: List<MealEntity>? = planerDao.getAllMeals()
 
             if (meals != null && meals.isNotEmpty()) {
+                var i = 0
                 for (meal in meals) {
                     var rowLinearLayout = LinearLayout(requireContext())
                     rowLinearLayout.orientation = LinearLayout.HORIZONTAL
@@ -70,18 +71,32 @@ class ThirdFragment : Fragment() {
                     rowLinearLayout.addView(textView)
 
                     // 3. Erstelle Button
-                    var button = Button(requireContext())
-                    button.text = "Edit"
-                    button.id = meal.id
-                    button.tag = "meals"
+                    var btnEdit = Button(requireContext())
+                    btnEdit.text = "Edit"
+                    btnEdit.id = i++
+                    btnEdit.tag = meal.id
+
+                    var btnDel = Button(requireContext())
+                    btnDel.text = "Delete"
+                    btnDel.id = i++
+                    btnDel.tag = meal.id
 
                     // 4. Füge den Button zum Container hinzu
-                    rowLinearLayout.addView(button)
+                    rowLinearLayout.addView(btnEdit)
+                    rowLinearLayout.addView(btnDel)
                     binding.container.addView(rowLinearLayout)
 
-                    binding.container.findViewById<Button>(button.id).setOnClickListener { btn ->
-                        viewModel.mealId = btn.id
+                    binding.container.findViewById<Button>(btnEdit.id).setOnClickListener { btn ->
+                        viewModel.mealId = btn.tag as Int
                         findNavController().navigate(R.id.action_ThirdFragment_to_EditMealFragment)
+                    }
+
+                    binding.container.findViewById<Button>(btnDel.id).setOnClickListener { btn ->
+                        lifecycleScope.launch {
+                            planerDao.deleteMealById(btn.tag as Int)
+                            findNavController().navigate(R.id.action_ThirdFragment_to_self)
+                        }
+
                     }
                 }
 
