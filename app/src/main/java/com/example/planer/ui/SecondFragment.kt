@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.planer.ViewModel.MealViewModel
 import com.example.planer.database.PlanerDao
+import com.example.planer.R
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.database.MealEntity
 import com.example.planer.databinding.FragmentSecondBinding
@@ -51,6 +53,7 @@ class SecondFragment : Fragment() {
             lifecycleScope.launch {
                 planerDao.insert(newMeal)
                 Log.d("NACHRICHT", "inserted new meal: ${newMeal.name}")
+                findNavController().navigate(R.id.action_SecondFragment_to_ThirdFragment)
             }
         }
     }
