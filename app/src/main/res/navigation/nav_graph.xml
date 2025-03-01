@@ -3,51 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/HomeFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.planer.ui.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        android:id="@+id/HomeFragment"
+        android:name="com.example.planer.ui.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_HomeFragment_to_AddMealFragment"
+            app:destination="@id/AddMealFragment" />
         <action
-            android:id="@+id/action_FirstFragment_to_ThirdFragment"
-            app:destination="@id/ThirdFragment" />
+            android:id="@+id/action_HomeFragment_to_MealListFragment"
+            app:destination="@id/MealListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.planer.ui.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/AddMealFragment"
+        android:name="com.example.planer.ui.AddMealFragment"
+        android:label="Add Meal"
+        tools:layout="@layout/fragment_add_meal">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_AddMealFragment_to_HomeFragment"
+            app:destination="@id/HomeFragment" />
         <action
-            android:id="@+id/action_SecondFragment_to_ThirdFragment"
-            app:destination="@id/ThirdFragment" />
+            android:id="@+id/action_AddMealFragment_to_MealListFragment"
+            app:destination="@id/MealListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/ThirdFragment"
-        android:name="com.example.planer.ui.ThirdFragment"
-        android:label="fragment_third"
-        tools:layout="@layout/fragment_third" >
+        android:id="@+id/MealListFragment"
+        android:name="com.example.planer.ui.MealListFragment"
+        android:label="Meals"
+        tools:layout="@layout/fragment_meal_list" >
         <action
-            android:id="@+id/action_ThirdFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_MealListFragment_to_HomeFragment"
+            app:destination="@id/HomeFragment" />
         <action
-            android:id="@+id/action_ThirdFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_MealListFragment_to_AddMealFragment"
+            app:destination="@id/AddMealFragment" />
         <action
-            android:id="@+id/action_ThirdFragment_to_EditMealFragment"
+            android:id="@+id/action_MealListFragment_to_EditMealFragment"
             app:destination="@id/EditMealFragment" />
         <action
-            android:id="@+id/action_ThirdFragment_to_self"
-            app:destination="@id/ThirdFragment" />
+            android:id="@+id/action_MealListFragment_to_self"
+            app:destination="@id/MealListFragment" />
     </fragment>
     <fragment
         android:id="@+id/EditMealFragment"
@@ -55,7 +55,7 @@
         android:label="fragment_edit_meal"
         tools:layout="@layout/fragment_edit_meal" >
         <action
-            android:id="@+id/action_EditMealFragment_to_ThirdFragment"
-            app:destination="@id/ThirdFragment" />
+            android:id="@+id/action_EditMealFragment_to_MealListFragment"
+            app:destination="@id/MealListFragment" />
     </fragment>
 </navigation>

@@ -1,39 +1,30 @@
 package com.example.planer.ui
 
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import com.example.planer.R
 import com.example.planer.ViewModel.MealViewModel
 import com.example.planer.database.MealEntity
-import com.example.planer.database.PlanerDao
 import com.example.planer.database.PlanerDatabase
-import com.example.planer.databinding.FragmentThirdBinding
+import com.example.planer.databinding.FragmentMealListBinding
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
-import java.util.Calendar
 import kotlin.getValue
 
-class ThirdFragment : Fragment() {
+class MealListFragment : Fragment() {
 
     // todo:
     // Meal Liste löschen
 
-    private var _binding: FragmentThirdBinding? = null
+    private var _binding: FragmentMealListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MealViewModel by activityViewModels()
 
@@ -41,7 +32,7 @@ class ThirdFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentThirdBinding.inflate(inflater, container, false)
+        _binding = FragmentMealListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -88,13 +79,13 @@ class ThirdFragment : Fragment() {
 
                     binding.container.findViewById<Button>(btnEdit.id).setOnClickListener { btn ->
                         viewModel.mealId = btn.tag as Int
-                        findNavController().navigate(R.id.action_ThirdFragment_to_EditMealFragment)
+                        findNavController().navigate(R.id.action_MealListFragment_to_EditMealFragment)
                     }
 
                     binding.container.findViewById<Button>(btnDel.id).setOnClickListener { btn ->
                         lifecycleScope.launch {
                             planerDao.deleteMealById(btn.tag as Int)
-                            findNavController().navigate(R.id.action_ThirdFragment_to_self)
+                            findNavController().navigate(R.id.action_MealListFragment_to_self)
                         }
 
                     }
@@ -106,7 +97,7 @@ class ThirdFragment : Fragment() {
 
 
         binding.buttonThird.setOnClickListener {
-            findNavController().navigate(R.id.action_ThirdFragment_to_SecondFragment)
+            findNavController().navigate(R.id.action_MealListFragment_to_AddMealFragment)
         }
     }
 

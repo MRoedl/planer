@@ -19,7 +19,7 @@ import com.example.planer.database.PlanerDatabase
 import com.example.planer.database.MealEntity
 import com.example.planer.database.MealPlanEntity
 import com.example.planer.databinding.ActivityMainBinding
-import com.example.planer.ui.FirstFragment
+import com.example.planer.ui.HomeFragment
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
 
-        //replaceFragment(FirstFragment())
+        //replaceFragment(HomeFragment())
 //        binding.fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null)
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> {
                 Log.d("NACHRICHT", "Settings clicked")
                 val navController2 = findNavController(R.id.nav_host_fragment_content_main)
-                navController2.navigate(R.id.ThirdFragment)
+                navController2.navigate(R.id.MealListFragment)
 
                 true
             }

@@ -5,43 +5,35 @@ import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
-import com.example.planer.databinding.FragmentFirstBinding
+import com.example.planer.databinding.FragmentHomeBinding
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import com.example.planer.MainActivity
 import com.example.planer.R
 import com.example.planer.database.PlanerDao
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.database.MealEntity
 import com.example.planer.database.MealPlanEntity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : Fragment() {
+class HomeFragment : Fragment() {
 
     // todo: Plan bearbeiten / Gerichte austauschen, verschieben
     // Verlauf von Gerichten
     // Statistiken zu Gerichten (wie oft, Wert / Prozentual)
     // Algo für Plan erstellung anpassen (Wochentage, gewichtung für Wahrscheinlichkeit)
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentHomeBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -51,7 +43,7 @@ class FirstFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -67,7 +59,7 @@ class FirstFragment : Fragment() {
         getPlan()
 
         binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            findNavController().navigate(R.id.action_HomeFragment_to_AddMealFragment)
         }
     }
 

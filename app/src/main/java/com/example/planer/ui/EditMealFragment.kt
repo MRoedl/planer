@@ -15,7 +15,6 @@ import com.example.planer.database.MealEntity
 import com.example.planer.database.PlanerDao
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.databinding.FragmentEditMealBinding
-import com.example.planer.databinding.FragmentSecondBinding
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -70,7 +69,7 @@ class EditMealFragment : Fragment() {
             lifecycleScope.launch {
                 planerDao.updateMeal(updatedMeal)
                 Log.d("NACHRICHT", "updated meal: ${updatedMeal.name}")
-                findNavController().navigate(R.id.action_EditMealFragment_to_ThirdFragment)
+                findNavController().navigate(R.id.action_EditMealFragment_to_MealListFragment)
             }
         }
     }
