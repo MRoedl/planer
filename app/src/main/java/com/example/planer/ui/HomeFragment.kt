@@ -101,8 +101,20 @@ class HomeFragment : Fragment() {
 
             val formatter1 = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
             val formattedDate1 = formatter1.format(calendar.time)
+            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
 
-            textViewLeft.text = formattedDate1.toString()
+            var dayOfWeekAsString = when (dayOfWeek) {
+                Calendar.MONDAY -> "Montag"
+                Calendar.TUESDAY -> "Dienstag"
+                Calendar.WEDNESDAY -> "Mittwoch"
+                Calendar.THURSDAY -> "Donnerstag"
+                Calendar.FRIDAY -> "Freitag"
+                Calendar.SATURDAY -> "Samstag"
+                Calendar.SUNDAY -> "Sonntag"
+                else -> "Unbekannt"
+            }
+
+            textViewLeft.text = "$dayOfWeekAsString  ${formattedDate1.toString()}"
             textViewLeft.gravity = Gravity.CENTER
 
             // 3. Erstelle die zweite TextView
