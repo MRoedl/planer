@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.room.Room
+import com.example.planer.database.Day
 import com.example.planer.database.PlanerDao
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.database.MealEntity
@@ -22,6 +23,8 @@ import com.example.planer.databinding.ActivityMainBinding
 import com.example.planer.ui.HomeFragment
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import kotlin.enums.enumEntries
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -107,37 +110,78 @@ class MainActivity : AppCompatActivity() {
 //            planerDao.deleteAllMeals()
             planerDao.deleteMealPlan()
 
-            val allMeals: List<MealEntity>? = planerDao.getAllMeals()
+            // Get the current date as a timestamp
+            val calendar = Calendar.getInstance()
+            var weekDay = calendar.get(Calendar.DAY_OF_WEEK)
+            var meals: List<MealEntity>? = null
 
-            if (allMeals != null && allMeals.isNotEmpty()) {
-                Log.d("NACHRICHT", "allMeals is NOT NULL")
+            for (i in 1..7) {
+                weekDay = calendar.get(Calendar.DAY_OF_WEEK)
 
-                var mealPlan: MutableList<MealPlanEntity> = mutableListOf()
+                meals = when (weekDay) {
+                    Calendar.MONDAY -> planerDao.getMealsByMonday()
+                    Calendar.TUESDAY -> planerDao.getMealsByTuesday()
+                    Calendar.WEDNESDAY -> planerDao.getMealsByWednesday()
+                    Calendar.THURSDAY -> planerDao.getMealsByThursday()
+                    Calendar.FRIDAY -> planerDao.getMealsByFriday()
+                    Calendar.SATURDAY -> planerDao.getMealsBySaturday()
+                    Calendar.SUNDAY -> planerDao.getMealsBySunday()
+                    else -> null
+                }
 
-                // Get the current date as a timestamp
-                val calendar = Calendar.getInstance()
-                var currentDateTimestamp = calendar.timeInMillis
-                var index = 0
+                calendar.add(Calendar.DAY_OF_MONTH, 1)
 
-                for (i in 1..7) {
-                    if (index > allMeals.size - 1) {
-                        index = 0
+                if (meals == null || meals.isEmpty()) {
+                    continue
+                }
+
+                var sumPopularity = 0
+                for (meal in meals) {
+                    sumPopularity += meal.popularity
+                }
+
+                //zufallszahl zwischen 0 und sumPopularity
+                var randomNum = Random.nextInt(0, sumPopularity)
+
+                for (meal in meals) {
+                    randomNum -= meal.popularity
+                    if (randomNum <= 0) {
+                        planerDao.insert(MealPlanEntity(date = calendar.timeInMillis, meal = meal.id))
+                        Log.d("NACHRICHT", "Added meal to mealPlan: ${meal.name}")
+                        break
                     }
-
-                    var meal: MealEntity = allMeals[index]
-                    mealPlan.add(MealPlanEntity(date = currentDateTimestamp, meal = meal.id))
-                    currentDateTimestamp += 86400000
-                    index++
                 }
 
-                for (mealPlanEntity in mealPlan) {
-                    planerDao.insert(mealPlanEntity)
-                }
-
-
-            } else {
-                Log.d("NACHRICHT", "allMeals is NULL")
             }
+
+//            val allMeals: List<MealEntity>? = planerDao.getAllMeals()
+//
+//            if (allMeals != null && allMeals.isNotEmpty()) {
+//                Log.d("NACHRICHT", "allMeals is NOT NULL")
+//
+//                var mealPlan: MutableList<MealPlanEntity> = mutableListOf()
+//
+//
+//                var index = 0
+//                for (i in 1..7) {
+//                    if (index > allMeals.size - 1) {
+//                        index = 0
+//                    }
+//
+//                    var meal: MealEntity = allMeals[index]
+//                    mealPlan.add(MealPlanEntity(date = currentDateTimestamp, meal = meal.id))
+//                    currentDateTimestamp += 86400000
+//                    index++
+//                }
+//
+//                for (mealPlanEntity in mealPlan) {
+//                    planerDao.insert(mealPlanEntity)
+//                }
+//
+//
+//            } else {
+//                Log.d("NACHRICHT", "allMeals is NULL")
+//            }
 
         }
     }

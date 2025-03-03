@@ -114,7 +114,7 @@ class HomeFragment : Fragment() {
                 else -> "Unbekannt"
             }
 
-            textViewLeft.text = "$dayOfWeekAsString  ${formattedDate1.toString()}"
+            textViewLeft.text = "$dayOfWeekAsString  ${formattedDate1}"
             textViewLeft.gravity = Gravity.CENTER
 
             // 3. Erstelle die zweite TextView
