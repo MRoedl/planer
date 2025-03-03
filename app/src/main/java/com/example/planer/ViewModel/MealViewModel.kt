@@ -5,5 +5,5 @@ import androidx.lifecycle.ViewModel
 
 class MealViewModel : ViewModel() {
 
-    var mealId = 0
+    var mealId: Long = 0
 }

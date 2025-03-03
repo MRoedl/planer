@@ -29,8 +29,7 @@
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:width="30dp"
+                    android:width="100dp"
                     android:minHeight="50dp"
                     android:text="@string/gericht" />
 
@@ -42,7 +41,7 @@
                     android:ems="10"
                     android:inputType="text"
                     android:minHeight="50dp"
-                    android:text="@string/name" />
+                    android:hint="Pizza" />
 
             </LinearLayout>
 
@@ -60,20 +59,20 @@
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:width="30dp"
+                    android:width="100dp"
                     android:minHeight="50dp"
-                    android:text="@string/kategorie" />
+                    android:gravity="center|left"
+                    android:text="Beliebtheit" />
 
-                <EditText
-                    android:id="@+id/ptKategorie"
+                <SeekBar
+                    android:id="@+id/seekBarPopularity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:minHeight="50dp"
-                    android:text="Name" />
+                    android:max="100"
+                    android:minWidth="100dp"
+                    android:progress="50" />
 
             </LinearLayout>
 
@@ -91,51 +90,72 @@
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:width="30dp"
+                    android:width="100dp"
                     android:minHeight="50dp"
-                    android:text="@string/zutaten" />
+                    android:gravity="center|left"
+                    android:text="Tage" />
 
-                <EditText
-                    android:id="@+id/ptZutaten"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:minHeight="50dp"
-                    android:text="Name" />
+                    android:orientation="vertical">
+
+                    <CheckBox
+                        android:id="@+id/checkBoxMonday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Montag" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxTuesday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Dienstag" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxWednesday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Mittwoch" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxThursday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Donnerstag" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxFriday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Freitag" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxSaturday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Samstag" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxSunday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Sonntag" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="16dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:minHeight="48dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:width="30dp"
-                    android:minHeight="50dp"
-                    android:text="@string/infos" />
-
-                <EditText
-                    android:id="@+id/ptInfos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:minHeight="50dp"
-                    android:text="Name" />
-            </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"

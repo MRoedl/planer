@@ -54,17 +54,30 @@ class EditMealFragment : Fragment() {
             Log.d("NACHRICHT", "got meal: ${meal.name}")
 
             binding.ptGericht.setText(meal.name)
-            binding.ptKategorie.setText(meal.category)
-            binding.ptZutaten.setText(meal.ingredients)
-            binding.ptInfos.setText(meal.dietaryTags)
+            binding.seekBarPopularity.progress = meal.popularity
+            binding.checkBoxMonday.isChecked = meal.monday
+            binding.checkBoxTuesday.isChecked = meal.tuesday
+            binding.checkBoxWednesday.isChecked = meal.wednesday
+            binding.checkBoxThursday.isChecked = meal.thursday
+            binding.checkBoxFriday.isChecked = meal.friday
+            binding.checkBoxSaturday.isChecked = meal.saturday
+            binding.checkBoxSunday.isChecked = meal.sunday
         }
 
         binding.btnUpdateMeal.setOnClickListener {
-            val name = binding.ptGericht.text.toString()
-            val category = binding.ptKategorie.text.toString()
-            val ingredients = binding.ptZutaten.text.toString()
-            val dietaryTags = binding.ptInfos.text.toString()
-            val updatedMeal = MealEntity(id = id, name = name, category = category, ingredients = ingredients, dietaryTags = dietaryTags, lastEaten = null)
+            val updatedMeal = MealEntity(
+                id = id,
+                name = binding.ptGericht.text.toString(),
+                popularity = binding.seekBarPopularity.progress,
+                monday = binding.checkBoxMonday.isChecked,
+                tuesday = binding.checkBoxTuesday.isChecked,
+                wednesday = binding.checkBoxWednesday.isChecked,
+                thursday = binding.checkBoxThursday.isChecked,
+                friday = binding.checkBoxFriday.isChecked,
+                saturday = binding.checkBoxSaturday.isChecked,
+                sunday = binding.checkBoxSunday.isChecked,
+                lastEaten = null
+            )
 
             lifecycleScope.launch {
                 planerDao.updateMeal(updatedMeal)

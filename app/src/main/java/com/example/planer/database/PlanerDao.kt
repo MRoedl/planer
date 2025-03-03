@@ -24,10 +24,10 @@ interface PlanerDao {
     suspend fun deleteAllMeals()
 
     @Query("DELETE FROM meals_table WHERE id = :id")
-    suspend fun deleteMealById(id: Int)
+    suspend fun deleteMealById(id: Long)
 
     @Query("SELECT * FROM meals_table WHERE id = :id")
-    suspend fun getMealById(id: Int): MealEntity
+    suspend fun getMealById(id: Long): MealEntity
 
     @Update
     suspend fun updateMeal(meal: MealEntity)
@@ -46,7 +46,7 @@ interface PlanerDao {
     suspend fun deleteMealPlan()
 
     @Query("DELETE FROM mealPlan_table WHERE id = :id")
-    suspend fun deleteMealPlanById(id: Int)
+    suspend fun deleteMealPlanById(id: Long)
 
     @Query("DELETE FROM SQLITE_SEQUENCE WHERE name='mealPlan_table'")
     suspend fun resetAutoIncrement()

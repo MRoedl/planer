@@ -78,13 +78,13 @@ class MealListFragment : Fragment() {
                     binding.container.addView(rowLinearLayout)
 
                     binding.container.findViewById<Button>(btnEdit.id).setOnClickListener { btn ->
-                        viewModel.mealId = btn.tag as Int
+                        viewModel.mealId = btn.tag as Long
                         findNavController().navigate(R.id.action_MealListFragment_to_EditMealFragment)
                     }
 
                     binding.container.findViewById<Button>(btnDel.id).setOnClickListener { btn ->
                         lifecycleScope.launch {
-                            planerDao.deleteMealById(btn.tag as Int)
+                            planerDao.deleteMealById(btn.tag as Long)
                             findNavController().navigate(R.id.action_MealListFragment_to_self)
                         }
 

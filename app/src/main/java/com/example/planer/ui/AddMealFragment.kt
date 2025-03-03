@@ -40,11 +40,18 @@ class AddMealFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnAddMeal.setOnClickListener {
-            val name = binding.ptGericht.text.toString()
-            val category = binding.ptKategorie.text.toString()
-            val ingredients = binding.ptZutaten.text.toString()
-            val dietaryTags = binding.ptInfos.text.toString()
-            val newMeal = MealEntity(name = name, category = category, ingredients = ingredients, dietaryTags = dietaryTags, lastEaten = null)
+            val newMeal = MealEntity(
+                name = binding.ptGericht.text.toString(),
+                popularity = binding.seekBarPopularity.progress,
+                monday = binding.checkBoxMonday.isChecked,
+                tuesday = binding.checkBoxTuesday.isChecked,
+                wednesday = binding.checkBoxWednesday.isChecked,
+                thursday = binding.checkBoxThursday.isChecked,
+                friday = binding.checkBoxFriday.isChecked,
+                saturday = binding.checkBoxSaturday.isChecked,
+                sunday = binding.checkBoxSunday.isChecked,
+                lastEaten = null
+            )
 
             val planerDao: PlanerDao = PlanerDatabase.getDatabase(requireContext()).planerDao()
 

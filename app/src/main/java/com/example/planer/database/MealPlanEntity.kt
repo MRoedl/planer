@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "mealPlan_table", foreignKeys = [ForeignKey(entity = MealEntity::class, parentColumns = ["id"], childColumns = ["meal"], onDelete = ForeignKey.CASCADE)])
 data class MealPlanEntity (
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "date") val date: Long,
-    @ColumnInfo(name = "meal") val meal: Int // Fremdschlüssel zu MealEntity.id
+    @ColumnInfo(name = "meal") val meal: Long // Fremdschlüssel zu MealEntity.id
 )
