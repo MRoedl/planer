@@ -51,12 +51,22 @@ class MealListFragment : Fragment() {
                 for (meal in meals) {
                     var rowLinearLayout = LinearLayout(requireContext())
                     rowLinearLayout.orientation = LinearLayout.HORIZONTAL
+//                    rowLinearLayout.layoutParams = LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.WRAP_CONTENT, // Breite: 0, um Gewichtung zu verwenden
+//                        LinearLayout.LayoutParams.WRAP_CONTENT,
+//                        1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
+//                    )
 
                     // 1. Erstelle die TextView
                     val textView = TextView(requireContext())
                     textView.setPadding(50, 20, 20, 20)
                     textView.textSize = 20f
                     textView.text = meal.name
+                    textView.layoutParams = LinearLayout.LayoutParams(
+                        0, // Breite: 0, um Gewichtung zu verwenden
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
+                    )
 
                     // 2. Füge die TextView zum Container hinzu
                     rowLinearLayout.addView(textView)
@@ -66,11 +76,21 @@ class MealListFragment : Fragment() {
                     btnEdit.text = "Edit"
                     btnEdit.id = i++
                     btnEdit.tag = meal.id
+                    btnEdit.layoutParams = LinearLayout.LayoutParams(
+                        0, // Breite: 0, um Gewichtung zu verwenden
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
+                    )
 
                     var btnDel = Button(requireContext())
                     btnDel.text = "Delete"
                     btnDel.id = i++
                     btnDel.tag = meal.id
+                    btnDel.layoutParams = LinearLayout.LayoutParams(
+                        0, // Breite: 0, um Gewichtung zu verwenden
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
+                    )
 
                     // 4. Füge den Button zum Container hinzu
                     rowLinearLayout.addView(btnEdit)

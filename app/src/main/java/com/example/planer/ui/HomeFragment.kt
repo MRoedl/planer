@@ -50,17 +50,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Hier greifen Sie auf die TextView zu und ändern den Text
-//        binding.textviewFirst.text = "Neuer Text für die TextView"
         // Show the loading indicator
         binding.progressBar.visibility = View.VISIBLE
         binding.containerForDynamicRows.visibility = View.GONE
 
         getPlan()
-
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_HomeFragment_to_AddMealFragment)
-        }
     }
 
     override fun onDestroyView() {
@@ -99,23 +93,24 @@ class HomeFragment : Fragment() {
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = mealPlanEntity.date
 
-            val formatter1 = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            val formatter1 = SimpleDateFormat("dd.MM", Locale.getDefault())
             val formattedDate1 = formatter1.format(calendar.time)
             val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
 
             var dayOfWeekAsString = when (dayOfWeek) {
-                Calendar.MONDAY -> "Montag"
-                Calendar.TUESDAY -> "Dienstag"
-                Calendar.WEDNESDAY -> "Mittwoch"
-                Calendar.THURSDAY -> "Donnerstag"
-                Calendar.FRIDAY -> "Freitag"
-                Calendar.SATURDAY -> "Samstag"
-                Calendar.SUNDAY -> "Sonntag"
+                Calendar.MONDAY -> "Mo"
+                Calendar.TUESDAY -> "Di"
+                Calendar.WEDNESDAY -> "Mi"
+                Calendar.THURSDAY -> "Do"
+                Calendar.FRIDAY -> "Fr"
+                Calendar.SATURDAY -> "Sa"
+                Calendar.SUNDAY -> "So"
                 else -> "Unbekannt"
             }
 
             textViewLeft.text = "$dayOfWeekAsString  ${formattedDate1}"
             textViewLeft.gravity = Gravity.CENTER
+            textViewLeft.textSize = 20f
 
             // 3. Erstelle die zweite TextView
             val textViewRight = TextView(requireContext())
@@ -124,6 +119,7 @@ class HomeFragment : Fragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
             )
+            textViewRight.textSize = 20f
 
             val mealId = mealPlanEntity.meal
             val planerDao: PlanerDao = PlanerDatabase.getDatabase(requireContext()).planerDao()
@@ -173,16 +169,6 @@ class HomeFragment : Fragment() {
             binding.progressBar.visibility = View.GONE
             binding.containerForDynamicRows.visibility = View.VISIBLE
         }
-
-//        lifecycleScope.launch {
-//            planerDao.getMealPlan().collect { mealPlan ->
-//                binding.progressBar.visibility = View.GONE
-//                binding.containerForDynamicRows.visibility = View.VISIBLE
-//
-//                createRows(mealPlan)
-//            }
-//
-//        }
 
     }
 
