@@ -53,6 +53,33 @@ interface PlanerDao {
     @Query("SELECT * FROM meals_table WHERE sunday = true")
     suspend fun getMealsBySunday(): List<MealEntity>
 
+    @Query("SELECT * FROM meals_table WHERE monday = true ORDER BY lastEaten ASC LIMIT 1")
+    suspend fun getOldestMealByMonday(): MealEntity
+
+    @Query("SELECT * FROM meals_table WHERE tuesday = true ORDER BY lastEaten ASC LIMIT 1")
+    suspend fun getOldestMealByTuesday(): MealEntity
+
+    @Query("SELECT * FROM meals_table WHERE wednesday = true ORDER BY lastEaten ASC LIMIT 1")
+    suspend fun getOldestMealByWednesday(): MealEntity
+
+    @Query("SELECT * FROM meals_table WHERE thursday = true ORDER BY lastEaten ASC LIMIT 1")
+    suspend fun getOldestMealByThursday(): MealEntity
+
+    @Query("SELECT * FROM meals_table WHERE friday = true ORDER BY lastEaten ASC LIMIT 1")
+    suspend fun getOldestMealByFriday(): MealEntity
+
+    @Query("SELECT * FROM meals_table WHERE saturday = true ORDER BY lastEaten ASC LIMIT 1")
+    suspend fun getOldestMealBySaturday(): MealEntity
+
+    @Query("SELECT * FROM meals_table WHERE sunday = true ORDER BY lastEaten ASC LIMIT 1")
+    suspend fun getOldestMealBySunday(): MealEntity
+
+    @Query("SELECT count(id) FROM meals_table")
+    suspend fun getMealCount(): Int
+
+    @Query("UPDATE meals_table SET lastEaten = null")
+    suspend fun resetLastEaten()
+
     // MealPlan_Table
     @Insert
     suspend fun insert(mealPlanEntity: MealPlanEntity)
@@ -63,6 +90,9 @@ interface PlanerDao {
     @Query("SELECT * FROM mealPlan_table LIMIT 1")
     suspend fun getFirstMealPlan(): MealPlanEntity
 
+    @Query("SELECT * FROM mealPlan_table ORDER BY date DESC LIMIT 1")
+    suspend fun getLatestMealPlan(): MealPlanEntity?
+
     @Query("DELETE FROM mealPlan_table")
     suspend fun deleteMealPlan()
 
@@ -71,14 +101,4 @@ interface PlanerDao {
 
     @Query("DELETE FROM SQLITE_SEQUENCE WHERE name='mealPlan_table'")
     suspend fun resetAutoIncrement()
-}
-
-enum class Day {
-    monday,
-    tuesday,
-    wednesday,
-    thursday,
-    friday,
-    saturday,
-    sunday
 }

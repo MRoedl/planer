@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.room.Room
-import com.example.planer.database.Day
 import com.example.planer.database.PlanerDao
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.database.MealEntity
@@ -25,6 +24,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import kotlin.enums.enumEntries
 import kotlin.random.Random
+import kotlin.random.nextInt
 
 class MainActivity : AppCompatActivity() {
 
@@ -96,27 +96,37 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-//    private fun replaceFragment(fragment: Fragment){
-//        val fragmentManager = supportFragmentManager
-//        val fragmentTransaction = fragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id.frameLayout,fragment)
-//        fragmentTransaction.commit()
-//    }
-
     fun calcMealPlan() {
         val planerDao: PlanerDao = PlanerDatabase.getDatabase(this).planerDao()
 
         insertMealPlan = lifecycleScope.launch {
 //            planerDao.deleteAllMeals()
             planerDao.deleteMealPlan()
+            planerDao.resetLastEaten()
+
+            val mealPlan: MealPlanEntity? = planerDao.getLatestMealPlan()
 
             // Get the current date as a timestamp
+            var current = Calendar.getInstance()
+
+            if (mealPlan != null) {
+                //todo
+                current.timeInMillis = mealPlan.date
+                current.add(Calendar.DAY_OF_MONTH, 1)
+            }
+
+            var dayInaWeek = Calendar.getInstance()
+            dayInaWeek.add(Calendar.DAY_OF_MONTH, 7)
+
+            //val totalMeals = planerDao.getMealCount()
+
             val calendar = Calendar.getInstance()
             var weekDay = calendar.get(Calendar.DAY_OF_WEEK)
             var meals: List<MealEntity>? = null
 
-            for (i in 1..7) {
-                weekDay = calendar.get(Calendar.DAY_OF_WEEK)
+            while (current <= dayInaWeek) {
+                //for (i in 1..7) {
+                weekDay = current.get(Calendar.DAY_OF_WEEK)
 
                 meals = when (weekDay) {
                     Calendar.MONDAY -> planerDao.getMealsByMonday()
@@ -129,61 +139,80 @@ class MainActivity : AppCompatActivity() {
                     else -> null
                 }
 
-                calendar.add(Calendar.DAY_OF_MONTH, 1)
-
                 if (meals == null || meals.isEmpty()) {
                     continue
                 }
 
                 var sumPopularity = 0
+                var countMeals = 0
                 for (meal in meals) {
                     sumPopularity += meal.popularity
+                    countMeals++
                 }
 
                 //zufallszahl zwischen 0 und sumPopularity
                 var randomNum = Random.nextInt(0, sumPopularity)
+                var fin = false
+                var meal: MealEntity? = null
 
-                for (meal in meals) {
-                    randomNum -= meal.popularity
-                    if (randomNum <= 0) {
-                        planerDao.insert(MealPlanEntity(date = calendar.timeInMillis, meal = meal.id))
-                        Log.d("NACHRICHT", "Added meal to mealPlan: ${meal.name}")
-                        break
+                while (fin == false && meals.isNotEmpty() && sumPopularity > 0) {
+                    randomNum = Random.nextInt(0, sumPopularity)
+                    meal = findMeal(meals, randomNum)
+
+                    if (meal != null) {
+                        if (meal.lastEaten == null || meal.lastEaten!! >= (current.timeInMillis - 86400000 * 7)) {
+                            //take another meal
+                            //remove meal from meals
+                            meals.toMutableList().remove(meal)
+
+                            sumPopularity -= meal.popularity
+                        } else {
+                            fin = true
+                        }
                     }
                 }
 
+                //falls abgebrochen, dann ältesteste meal benutzen
+                if (fin == false) {
+                    meal = when (weekDay) {
+                        Calendar.MONDAY -> planerDao.getOldestMealByMonday()
+                        Calendar.TUESDAY -> planerDao.getOldestMealByTuesday()
+                        Calendar.WEDNESDAY -> planerDao.getOldestMealByWednesday()
+                        Calendar.THURSDAY -> planerDao.getOldestMealByThursday()
+                        Calendar.FRIDAY -> planerDao.getOldestMealByFriday()
+                        Calendar.SATURDAY -> planerDao.getOldestMealBySaturday()
+                        Calendar.SUNDAY -> planerDao.getOldestMealBySunday()
+                        else -> null
+                    }
+                }
+
+                if (meal == null) {
+                    continue
+                }
+
+                planerDao.insert(MealPlanEntity(date = current.timeInMillis, meal = meal.id))
+                meal.lastEaten = current.timeInMillis
+                planerDao.updateMeal(meal)
+                Log.d("NACHRICHT", "Added meal to mealPlan: ${meal.name}")
+
+                current.add(Calendar.DAY_OF_MONTH, 1)
             }
 
-//            val allMeals: List<MealEntity>? = planerDao.getAllMeals()
-//
-//            if (allMeals != null && allMeals.isNotEmpty()) {
-//                Log.d("NACHRICHT", "allMeals is NOT NULL")
-//
-//                var mealPlan: MutableList<MealPlanEntity> = mutableListOf()
-//
-//
-//                var index = 0
-//                for (i in 1..7) {
-//                    if (index > allMeals.size - 1) {
-//                        index = 0
-//                    }
-//
-//                    var meal: MealEntity = allMeals[index]
-//                    mealPlan.add(MealPlanEntity(date = currentDateTimestamp, meal = meal.id))
-//                    currentDateTimestamp += 86400000
-//                    index++
-//                }
-//
-//                for (mealPlanEntity in mealPlan) {
-//                    planerDao.insert(mealPlanEntity)
-//                }
-//
-//
-//            } else {
-//                Log.d("NACHRICHT", "allMeals is NULL")
-//            }
+
 
         }
+    }
+
+    fun findMeal(meals: List<MealEntity>, randomNum: Int): MealEntity? {
+        var randomNum = randomNum
+        for (meal in meals) {
+            randomNum -= meal.popularity
+            if (randomNum <= 0) {
+                //meal found
+                return meal
+            }
+        }
+        return null
     }
 
 }

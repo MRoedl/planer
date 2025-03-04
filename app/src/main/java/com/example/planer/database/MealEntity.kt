@@ -16,5 +16,5 @@ data class MealEntity(
     @ColumnInfo(name = "friday") val friday: Boolean,
     @ColumnInfo(name = "saturday") val saturday: Boolean,
     @ColumnInfo(name = "sunday") val sunday: Boolean,
-    @ColumnInfo(name = "lastEaten") val lastEaten: Long?
+    @ColumnInfo(name = "lastEaten") var lastEaten: Long?
 )
