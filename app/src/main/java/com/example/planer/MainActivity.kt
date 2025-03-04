@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity() {
 
                     if (meal == null) continue
 
-                    if (meal.lastEaten != null && meal.lastEaten!! >= (current.timeInMillis - 86400000 * 7)) {
+                    if (meal.lastEaten != null && meal.lastEaten!! >= (current.timeInMillis - 86400000 * 6)) {
                         mealsToChoiceFrom.remove(mealKey)
                         sumPopularity -= meal.popularity - 10 * ((current.timeInMillis - meal.lastEaten!!) / 86400000).toInt()
 
