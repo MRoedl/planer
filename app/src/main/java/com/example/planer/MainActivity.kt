@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity() {
 
         insertMealPlan = lifecycleScope.launch {
 //            planerDao.deleteAllMeals()
+            //todo for testing
             planerDao.deleteMealPlan()
             planerDao.resetLastEaten()
 
@@ -110,7 +111,6 @@ class MainActivity : AppCompatActivity() {
             var current = Calendar.getInstance()
 
             if (mealPlan != null) {
-                //todo
                 current.timeInMillis = mealPlan.date
                 current.add(Calendar.DAY_OF_MONTH, 1)
             }
@@ -143,10 +143,21 @@ class MainActivity : AppCompatActivity() {
                     continue
                 }
 
+                var mealsToChoiceFrom: MutableMap<Int, MealEntity> = mutableMapOf<Int, MealEntity>()
                 var sumPopularity = 0
                 var countMeals = 0
+                var popularity = 0
+
                 for (meal in meals) {
-                    sumPopularity += meal.popularity
+                    popularity = meal.popularity
+                    meal.lastEaten?.let {
+                        if (it >= (current.timeInMillis - 86400000 * 4)) {
+                            popularity += 10 * ((current.timeInMillis - it) / 86400000).toInt()
+                        }
+                    }
+                    sumPopularity += popularity
+                    mealsToChoiceFrom.put(sumPopularity, meal)
+
                     countMeals++
                 }
 
@@ -154,22 +165,25 @@ class MainActivity : AppCompatActivity() {
                 var randomNum = Random.nextInt(0, sumPopularity)
                 var fin = false
                 var meal: MealEntity? = null
+                var mealKey = 0
 
-                while (fin == false && meals.isNotEmpty() && sumPopularity > 0) {
+                while (fin == false && mealsToChoiceFrom.isNotEmpty() && sumPopularity > 0) {
                     randomNum = Random.nextInt(0, sumPopularity)
-                    meal = findMeal(meals, randomNum)
 
-                    if (meal != null) {
-                        if (meal.lastEaten == null || meal.lastEaten!! >= (current.timeInMillis - 86400000 * 7)) {
-                            //take another meal
-                            //remove meal from meals
-                            meals.toMutableList().remove(meal)
+                    mealKey = findMealWithMap(mealsToChoiceFrom, randomNum)
+                    meal = mealsToChoiceFrom[mealKey]
+                    //meal = findMeal(meals, randomNum)
 
-                            sumPopularity -= meal.popularity
-                        } else {
-                            fin = true
-                        }
+                    if (meal == null) continue
+
+                    if (meal.lastEaten != null && meal.lastEaten!! >= (current.timeInMillis - 86400000 * 7)) {
+                        mealsToChoiceFrom.remove(mealKey)
+                        sumPopularity -= meal.popularity - 10 * ((current.timeInMillis - meal.lastEaten!!) / 86400000).toInt()
+
+                    } else {
+                        fin = true
                     }
+
                 }
 
                 //falls abgebrochen, dann ältesteste meal benutzen
@@ -213,6 +227,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return null
+    }
+
+    fun findMealWithMap(meals: MutableMap<Int, MealEntity>, randomNum: Int): Int {
+        val keys = meals.keys.sorted()
+        if (keys.size == 1) return keys[0]
+
+        for (mealKey in keys) {
+            if (randomNum < mealKey) {
+                return mealKey
+            }
+        }
+        return 0
     }
 
 }
