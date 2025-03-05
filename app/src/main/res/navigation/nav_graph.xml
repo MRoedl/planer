@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_HomeFragment_to_MealListFragment"
             app:destination="@id/MealListFragment" />
+        <action
+            android:id="@+id/action_HomeFragment_to_self"
+            app:destination="@id/HomeFragment" />
     </fragment>
     <fragment
         android:id="@+id/AddMealFragment"

@@ -77,6 +77,9 @@ interface PlanerDao {
     @Query("SELECT count(id) FROM meals_table")
     suspend fun getMealCount(): Int
 
+    @Query("UPDATE meals_table SET lastEaten = :date WHERE id = :id")
+    suspend fun updateLastEaten(date: Long?, id: Long)
+
     @Query("UPDATE meals_table SET lastEaten = null")
     suspend fun resetLastEaten()
 
@@ -84,8 +87,20 @@ interface PlanerDao {
     @Insert
     suspend fun insert(mealPlanEntity: MealPlanEntity)
 
+    @Update
+    suspend fun update(mealPlanEntity: MealPlanEntity)
+
+    @Query("UPDATE mealPlan_table SET meal = :meal WHERE id = :id")
+    suspend fun updateById(id: Long, meal: Long)
+
+    @Query("SELECT id, meal, max(date) as date FROM mealPlan_table GROUP BY meal")
+    suspend fun getLastEaten(): List<MealPlanEntity>
+
     @Query("SELECT * FROM mealPlan_table")
     suspend fun getMealPlan(): List<MealPlanEntity>
+
+    @Query("SELECT * FROM mealPlan_table WHERE id = :id")
+    suspend fun getMealPlanById(id: Long): MealPlanEntity
 
     @Query("SELECT * FROM mealPlan_table LIMIT 1")
     suspend fun getFirstMealPlan(): MealPlanEntity

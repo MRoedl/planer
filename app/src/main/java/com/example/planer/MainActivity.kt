@@ -96,14 +96,16 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-    fun calcMealPlan() {
+    fun calcMealPlan() { //todo lastEating variablen rausnehmen und durch abfragen ermitteln
         val planerDao: PlanerDao = PlanerDatabase.getDatabase(this).planerDao()
 
         insertMealPlan = lifecycleScope.launch {
 //            planerDao.deleteAllMeals()
             //todo for testing
-            planerDao.deleteMealPlan()
-            planerDao.resetLastEaten()
+            //planerDao.deleteMealPlan()
+            //planerDao.resetLastEaten()
+
+            updateAllLastEaten()
 
             val mealPlan: MealPlanEntity? = planerDao.getLatestMealPlan()
 
@@ -212,8 +214,6 @@ class MainActivity : AppCompatActivity() {
                 current.add(Calendar.DAY_OF_MONTH, 1)
             }
 
-
-
         }
     }
 
@@ -239,6 +239,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return 0
+    }
+
+    //todo testen
+    fun updateAllLastEaten() {
+        val planerDao: PlanerDao = PlanerDatabase.getDatabase(this).planerDao()
+
+        lifecycleScope.launch {
+            val mealsPlanLastEaten = planerDao.getLastEaten()
+//            val mealPlans = planerDao.getMealPlan()
+//            mealPlans.maxBy { it.date }
+//            mealPlans.groupBy { it.meal }
+
+            for (mealPlan in mealsPlanLastEaten) {
+                planerDao.updateLastEaten(mealPlan.date, mealPlan.meal)
+                Log.d("NACHRICHT", "Last eaten: ${mealPlan.date}")
+            }
+
+        }
+
     }
 
 }

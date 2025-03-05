@@ -7,13 +7,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.planer.databinding.FragmentHomeBinding
 import androidx.lifecycle.lifecycleScope
 import com.example.planer.MainActivity
 import com.example.planer.R
+import com.example.planer.ViewModel.MealViewModel
 import com.example.planer.database.PlanerDao
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.database.MealEntity
@@ -22,6 +26,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import kotlin.getValue
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -38,6 +43,7 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val viewModel: MealViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +74,7 @@ class HomeFragment : Fragment() {
 
         // Anzahl der Zeilen, die du erstellen möchtest
         val numberOfLines = 3
+        var i = 0
 
         // Schleife zum Erstellen der Zeilen
         for (mealPlanEntity in mealPlan) {
@@ -120,9 +127,15 @@ class HomeFragment : Fragment() {
                 1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
             )
             textViewRight.textSize = 20f
+            textViewRight.gravity = Gravity.CENTER
 
             val mealId = mealPlanEntity.meal
             val planerDao: PlanerDao = PlanerDatabase.getDatabase(requireContext()).planerDao()
+
+            // 3.2 Erstelle Button
+            var btnEdit = Button(requireContext())
+            btnEdit.text = "Edit"
+            btnEdit.id = i++
 
             lifecycleScope.launch {
                 val meal: MealEntity? = planerDao.getMealById(mealId)
@@ -130,6 +143,15 @@ class HomeFragment : Fragment() {
                 if (meal != null) {
                     textViewRight.text = meal.name
                     Log.d("NACHRICHT", "$mealId = ${meal.name}")
+
+                    // 3.2 Erstelle Button
+                    btnEdit.tag = mealPlanEntity.id
+                    btnEdit.layoutParams = LinearLayout.LayoutParams(
+                        0, // Breite: 0, um Gewichtung zu verwenden
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
+                    )
+
                 } else {
                     textViewRight.text = "Null"
                     Log.d("NACHRICHT", "NULL")
@@ -137,14 +159,55 @@ class HomeFragment : Fragment() {
 
             }
 
-            textViewRight.gravity = Gravity.CENTER
-
             // 4. Füge die TextViews zur horizontalen LinearLayout hinzu
             rowLinearLayout.addView(textViewLeft)
             rowLinearLayout.addView(textViewRight)
+            rowLinearLayout.addView(btnEdit)
 
             // 5. Füge die horizontale LinearLayout zum Container hinzu
             container.addView(rowLinearLayout)
+
+            container.findViewById<Button>(btnEdit.id).setOnClickListener { btn ->
+                //viewModel.mealId = btn.tag as Long
+                //open list to select meal
+                var meals : List<MealEntity> = listOf()
+                lifecycleScope.launch {
+                    meals = planerDao.getAllMeals()
+
+                    var mealNames : Array<String> = arrayOf()
+                    for (meal in meals) {
+                        mealNames += meal.name
+                    }
+
+                    var selected: Int = 0
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder
+                        .setTitle("Test")
+                        .setNegativeButton("Cancel") { dialog, which ->
+                            dialog.cancel()
+                        }
+                        .setPositiveButton("OK") { dialog, which ->
+                            //update
+                            lifecycleScope.launch {
+                                planerDao.updateById(btn.tag as Long, meals[selected].id)
+                                Log.d("NACHRICHT", "Updated ${btn.tag} to ${meals[selected].name}")
+                                findNavController().navigate(R.id.action_HomeFragment_to_self) //reload todo: LiveData?
+                            }
+                        }
+                        .setSingleChoiceItems(
+                            mealNames, 0
+                        ) { dialog, which ->
+                            // Do something on item tapped.
+                            Log.d("NACHRICHT", "Item tapped: $which - ${meals[which].name}")
+                            selected = which
+                        }
+
+                    val dialog = builder.create()
+                    dialog.show()
+                }
+
+            }
+
         }
 
 
