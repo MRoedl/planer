@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -72,24 +73,26 @@ class MealListFragment : Fragment() {
                     rowLinearLayout.addView(textView)
 
                     // 3. Erstelle Button
-                    var btnEdit = Button(requireContext())
-                    btnEdit.text = "Edit"
+                    var btnEdit = ImageButton(requireContext())
+                    btnEdit.setImageResource(R.drawable.edit)
+                    btnEdit.background = null
                     btnEdit.id = i++
                     btnEdit.tag = meal.id
                     btnEdit.layoutParams = LinearLayout.LayoutParams(
                         0, // Breite: 0, um Gewichtung zu verwenden
                         LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
+                        0.5f // Gewichtung: 1, um den verfügbaren Platz zu teilen
                     )
 
-                    var btnDel = Button(requireContext())
-                    btnDel.text = "Delete"
+                    var btnDel = ImageButton(requireContext())
+                    btnDel.setImageResource(R.drawable.delete)
+                    btnDel.background = null
                     btnDel.id = i++
                     btnDel.tag = meal.id
                     btnDel.layoutParams = LinearLayout.LayoutParams(
                         0, // Breite: 0, um Gewichtung zu verwenden
                         LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
+                        0.5f // Gewichtung: 1, um den verfügbaren Platz zu teilen
                     )
 
                     // 4. Füge den Button zum Container hinzu
@@ -97,12 +100,12 @@ class MealListFragment : Fragment() {
                     rowLinearLayout.addView(btnDel)
                     binding.container.addView(rowLinearLayout)
 
-                    binding.container.findViewById<Button>(btnEdit.id).setOnClickListener { btn ->
+                    binding.container.findViewById<ImageButton>(btnEdit.id).setOnClickListener { btn ->
                         viewModel.mealId = btn.tag as Long
                         findNavController().navigate(R.id.action_MealListFragment_to_EditMealFragment)
                     }
 
-                    binding.container.findViewById<Button>(btnDel.id).setOnClickListener { btn ->
+                    binding.container.findViewById<ImageButton>(btnDel.id).setOnClickListener { btn ->
                         lifecycleScope.launch {
                             planerDao.deleteMealById(btn.tag as Long)
                             findNavController().navigate(R.id.action_MealListFragment_to_self)

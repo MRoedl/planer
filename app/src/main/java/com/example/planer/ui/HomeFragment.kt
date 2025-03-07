@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -78,6 +78,16 @@ class HomeFragment : Fragment() {
 
         // Schleife zum Erstellen der Zeilen
         for (mealPlanEntity in mealPlan) {
+            // Get the current date as a timestamp
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = mealPlanEntity.date
+
+            val formatter1 = SimpleDateFormat("dd.MM", Locale.getDefault())
+            val formatter2 = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
+            val formattedDate1 = formatter1.format(calendar.time)
+            val currentDateFormated = formatter2.format(calendar.time)
+            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+
             // 1. Erstelle die horizontale LinearLayout für eine Zeile
             val rowLinearLayout = LinearLayout(requireContext())
             rowLinearLayout.layoutParams = LinearLayout.LayoutParams(
@@ -85,24 +95,26 @@ class HomeFragment : Fragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             rowLinearLayout.orientation = LinearLayout.HORIZONTAL
-            //rowLinearLayout.gravity = Gravity.CENTER_HORIZONTAL
+            rowLinearLayout.gravity = Gravity.CENTER
+
+            val todayFormated = formatter2.format(Calendar.getInstance().timeInMillis)
+
+            if (currentDateFormated == todayFormated) {
+                rowLinearLayout.setBackgroundColor(resources.getColor(R.color.highlighted))
+            } else if (currentDateFormated > todayFormated) {
+                rowLinearLayout.setBackgroundColor(resources.getColor(R.color.future))
+            } else {
+                rowLinearLayout.setBackgroundColor(resources.getColor(R.color.past))
+            }
 
             // 2. Erstelle die erste TextView
-            val textViewLeft = TextView(requireContext())
-            textViewLeft.layoutParams = LinearLayout.LayoutParams(
+            val tVDate = TextView(requireContext())
+            tVDate.layoutParams = LinearLayout.LayoutParams(
                 0, // Breite: 0, um Gewichtung zu verwenden
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
             )
-            textViewLeft.setPadding(20, 50, 20, 20)
-
-            // Get the current date as a timestamp
-            val calendar = Calendar.getInstance()
-            calendar.timeInMillis = mealPlanEntity.date
-
-            val formatter1 = SimpleDateFormat("dd.MM", Locale.getDefault())
-            val formattedDate1 = formatter1.format(calendar.time)
-            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+            //tVDate.setPadding(20, 50, 20, 20)
 
             var dayOfWeekAsString = when (dayOfWeek) {
                 Calendar.MONDAY -> "Mo"
@@ -115,59 +127,63 @@ class HomeFragment : Fragment() {
                 else -> "Unbekannt"
             }
 
-            textViewLeft.text = "$dayOfWeekAsString  ${formattedDate1}"
-            textViewLeft.gravity = Gravity.CENTER
-            textViewLeft.textSize = 20f
+            tVDate.text = "$dayOfWeekAsString  ${formattedDate1}"
+            tVDate.setTextColor(resources.getColor(R.color.white))
+            tVDate.gravity = Gravity.CENTER
+            tVDate.textSize = 20f
 
             // 3. Erstelle die zweite TextView
-            val textViewRight = TextView(requireContext())
-            textViewRight.layoutParams = LinearLayout.LayoutParams(
+            val tVMeal = TextView(requireContext())
+            tVMeal.layoutParams = LinearLayout.LayoutParams(
                 0, // Breite: 0, um Gewichtung zu verwenden
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
             )
-            textViewRight.textSize = 20f
-            textViewRight.gravity = Gravity.CENTER
+            tVMeal.textSize = 20f
+            tVMeal.gravity = Gravity.CENTER
+            tVMeal.setTextColor(resources.getColor(R.color.white))
 
             val mealId = mealPlanEntity.meal
             val planerDao: PlanerDao = PlanerDatabase.getDatabase(requireContext()).planerDao()
 
             // 3.2 Erstelle Button
-            var btnEdit = Button(requireContext())
-            btnEdit.text = "Edit"
+            var btnEdit: ImageButton = ImageButton(requireContext())
+            btnEdit.setImageResource(R.drawable.edit)
+            btnEdit.background = null
+            btnEdit.layoutParams = LinearLayout.LayoutParams(
+                0, // Breite: 0, um Gewichtung zu verwenden
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0.5f // Gewichtung: 1, um den verfügbaren Platz zu teilen
+            )
             btnEdit.id = i++
 
             lifecycleScope.launch {
                 val meal: MealEntity? = planerDao.getMealById(mealId)
 
                 if (meal != null) {
-                    textViewRight.text = meal.name
+                    tVMeal.text = meal.name
                     Log.d("NACHRICHT", "$mealId = ${meal.name}")
 
                     // 3.2 Erstelle Button
                     btnEdit.tag = mealPlanEntity.id
-                    btnEdit.layoutParams = LinearLayout.LayoutParams(
-                        0, // Breite: 0, um Gewichtung zu verwenden
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
-                    )
 
                 } else {
-                    textViewRight.text = "Null"
+                    tVMeal.text = "Null"
                     Log.d("NACHRICHT", "NULL")
                 }
 
             }
 
             // 4. Füge die TextViews zur horizontalen LinearLayout hinzu
-            rowLinearLayout.addView(textViewLeft)
-            rowLinearLayout.addView(textViewRight)
+            rowLinearLayout.addView(tVDate)
+            rowLinearLayout.addView(tVMeal)
             rowLinearLayout.addView(btnEdit)
 
             // 5. Füge die horizontale LinearLayout zum Container hinzu
             container.addView(rowLinearLayout)
 
-            container.findViewById<Button>(btnEdit.id).setOnClickListener { btn ->
+            // 6. Button Listener
+            container.findViewById<ImageButton>(btnEdit.id).setOnClickListener { btn ->
                 //viewModel.mealId = btn.tag as Long
                 //open list to select meal
                 var meals : List<MealEntity> = listOf()
@@ -182,8 +198,8 @@ class HomeFragment : Fragment() {
                     var selected: Int = 0
                     val builder = AlertDialog.Builder(requireContext())
                     builder
-                        .setTitle("Test")
-                        .setNegativeButton("Cancel") { dialog, which ->
+                        .setTitle("Gericht auswählen")
+                        .setNegativeButton("Abbrechen") { dialog, which ->
                             dialog.cancel()
                         }
                         .setPositiveButton("OK") { dialog, which ->
