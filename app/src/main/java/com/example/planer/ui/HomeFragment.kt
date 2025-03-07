@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.planer.databinding.FragmentHomeBinding
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.example.planer.MainActivity
 import com.example.planer.R
 import com.example.planer.ViewModel.MealViewModel
@@ -92,8 +93,9 @@ class HomeFragment : Fragment() {
             val rowLinearLayout = LinearLayout(requireContext())
             rowLinearLayout.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                200
             )
+            rowLinearLayout.minimumHeight = LinearLayout.LayoutParams.WRAP_CONTENT
             rowLinearLayout.orientation = LinearLayout.HORIZONTAL
             rowLinearLayout.gravity = Gravity.CENTER
 
