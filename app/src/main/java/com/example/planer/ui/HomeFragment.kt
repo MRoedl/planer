@@ -91,6 +91,7 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
 
         var i = 0
         val context = this
+        var todayPos = 0
 
         lifecycleScope.launch {
             // Schleife zum Erstellen der Zeilen
@@ -111,6 +112,7 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
                 var pColor = resources.getColor(R.color.white)
                 if (currentDateFormated == todayFormated) {
                     pColor = resources.getColor(R.color.highlighted)
+                    todayPos = i
                 } else if (currentDateFormated > todayFormated) {
                     pColor = resources.getColor(R.color.future)
                 } else {
@@ -163,7 +165,14 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
             val adapter = MealListAdapter(items)
             recyclerView.adapter = adapter
             adapter.onMealClickListener = context
+
+            binding.progressBar.visibility = View.GONE
+            binding.containerForDynamicRows.visibility = View.VISIBLE
+
+            recyclerView.scrollToPosition(todayPos)
         }
+        //recyclerView.smoothScrollBy(0, 1000)
+
 
     }
 
@@ -222,8 +231,7 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
             } else {
                 Log.d("NACHRICHT", "NULL")
             }
-            binding.progressBar.visibility = View.GONE
-            binding.containerForDynamicRows.visibility = View.VISIBLE
+
         }
 
     }

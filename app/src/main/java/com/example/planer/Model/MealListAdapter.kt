@@ -95,55 +95,12 @@ class MealListAdapter(private val items: List<DynamicItem>) :
                 //Button Listener
                 mealPlanHolder.imageButton.setOnClickListener { btn ->
                     onMealClickListener?.onMealClick(btn.tag as Long)
-                    //HomeFragment().onMealClick(btn.tag as Long)
                 }
                 
             }
 
         }
 
-
-//        // 6. Button Listener
-//        container.findViewById<ImageButton>(btnEdit.id).setOnClickListener { btn ->
-//            //viewModel.mealId = btn.tag as Long
-//            //open list to select meal
-//            var meals: List<MealEntity> = listOf()
-//            lifecycleScope.launch {
-//                meals = planerDao.getAllMeals()
-//
-//                var mealNames: Array<String> = arrayOf()
-//                for (meal in meals) {
-//                    mealNames += meal.name
-//                }
-//
-//                var selected: Int = 0
-//                val builder = AlertDialog.Builder(requireContext())
-//                builder
-//                    .setTitle("Gericht auswählen")
-//                    .setNegativeButton("Abbrechen") { dialog, which ->
-//                        dialog.cancel()
-//                    }
-//                    .setPositiveButton("OK") { dialog, which ->
-//                        //update
-//                        lifecycleScope.launch {
-//                            planerDao.updateById(btn.tag as Long, meals[selected].id)
-//                            Log.d("NACHRICHT", "Updated ${btn.tag} to ${meals[selected].name}")
-//                            findNavController().navigate(R.id.action_HomeFragment_to_self) //reload todo: LiveData?
-//                        }
-//                    }
-//                    .setSingleChoiceItems(
-//                        mealNames, 0
-//                    ) { dialog, which ->
-//                        // Do something on item tapped.
-//                        Log.d("NACHRICHT", "Item tapped: $which - ${meals[which].name}")
-//                        selected = which
-//                    }
-//
-//                val dialog = builder.create()
-//                dialog.show()
-//            }
-//
-//        }
     }
 
     override fun getItemCount(): Int = items.size
