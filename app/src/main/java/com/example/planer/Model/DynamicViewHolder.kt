@@ -8,12 +8,13 @@ import com.example.planer.R
 
 sealed class DynamicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    class MealPlanViewHolder(itemView: View) : DynamicViewHolder(itemView) {
-        val mealIdTextView: TextView = itemView.findViewById(R.id.mealIdTextView)
-        val maxDateTextView: TextView = itemView.findViewById(R.id.maxDateTextView)
+    class MealListViewHolder(itemView: View) : DynamicViewHolder(itemView) {
+        val meal: TextView = itemView.findViewById(R.id.meal)
+        val editButton: ImageButton = itemView.findViewById(R.id.btnEdit)
+        val deleteButton: ImageButton = itemView.findViewById(R.id.btnDelete)
     }
 
-    class MealListViewHolder(itemView: View) : DynamicViewHolder(itemView) {
+    class MealPlanViewHolder(itemView: View) : DynamicViewHolder(itemView) {
         val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
         val mealTextView: TextView = itemView.findViewById(R.id.mealTextView)
         val imageButton: ImageButton = itemView.findViewById(R.id.imageButton)

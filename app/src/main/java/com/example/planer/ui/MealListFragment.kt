@@ -1,5 +1,6 @@
 package com.example.planer.ui
 
+import MealListAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.planer.Model.DynamicItem
 import com.example.planer.R
 import com.example.planer.ViewModel.MealViewModel
 import com.example.planer.database.MealEntity
@@ -20,7 +23,7 @@ import com.example.planer.databinding.FragmentMealListBinding
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-class MealListFragment : Fragment() {
+class MealListFragment : Fragment(), MealListAdapter.OnMealClickListener {
 
     // todo:
     // Meal Liste löschen
@@ -40,7 +43,24 @@ class MealListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get the MealPlanDao instance
+        createRows()
+
+        binding.buttonThird.setOnClickListener {
+            findNavController().navigate(R.id.action_MealListFragment_to_AddMealFragment)
+        }
+    }
+
+    fun createRows() {
+        // 1. Referenz auf die RecyclerView
+        val recyclerView = binding.recyclerView
+
+        // 2. LayoutManager setzen
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // 3. Daten erstellen (Beispiel)
+        var items = mutableListOf<DynamicItem>()
+        val context = this
+
         val planerDao = PlanerDatabase.getDatabase(requireContext()).planerDao()
 
         // Example of using a coroutine
@@ -48,85 +68,35 @@ class MealListFragment : Fragment() {
             val meals: List<MealEntity>? = planerDao.getAllMeals()
 
             if (meals != null && meals.isNotEmpty()) {
-                var i = 0
                 for (meal in meals) {
-                    var rowLinearLayout = LinearLayout(requireContext())
-                    rowLinearLayout.orientation = LinearLayout.HORIZONTAL
-//                    rowLinearLayout.layoutParams = LinearLayout.LayoutParams(
-//                        LinearLayout.LayoutParams.WRAP_CONTENT, // Breite: 0, um Gewichtung zu verwenden
-//                        LinearLayout.LayoutParams.WRAP_CONTENT,
-//                        1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
-//                    )
-
-                    // 1. Erstelle die TextView
-                    val textView = TextView(requireContext())
-                    textView.setPadding(50, 20, 20, 20)
-                    textView.textSize = 20f
-                    textView.text = meal.name
-                    textView.layoutParams = LinearLayout.LayoutParams(
-                        0, // Breite: 0, um Gewichtung zu verwenden
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f // Gewichtung: 1, um den verfügbaren Platz zu teilen
-                    )
-
-                    // 2. Füge die TextView zum Container hinzu
-                    rowLinearLayout.addView(textView)
-
-                    // 3. Erstelle Button
-                    var btnEdit = ImageButton(requireContext())
-                    btnEdit.setImageResource(R.drawable.edit)
-                    btnEdit.background = null
-                    btnEdit.id = i++
-                    btnEdit.tag = meal.id
-                    btnEdit.layoutParams = LinearLayout.LayoutParams(
-                        0, // Breite: 0, um Gewichtung zu verwenden
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        0.5f // Gewichtung: 1, um den verfügbaren Platz zu teilen
-                    )
-
-                    var btnDel = ImageButton(requireContext())
-                    btnDel.setImageResource(R.drawable.delete)
-                    btnDel.background = null
-                    btnDel.id = i++
-                    btnDel.tag = meal.id
-                    btnDel.layoutParams = LinearLayout.LayoutParams(
-                        0, // Breite: 0, um Gewichtung zu verwenden
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        0.5f // Gewichtung: 1, um den verfügbaren Platz zu teilen
-                    )
-
-                    // 4. Füge den Button zum Container hinzu
-                    rowLinearLayout.addView(btnEdit)
-                    rowLinearLayout.addView(btnDel)
-                    binding.container.addView(rowLinearLayout)
-
-                    binding.container.findViewById<ImageButton>(btnEdit.id).setOnClickListener { btn ->
-                        viewModel.mealId = btn.tag as Long
-                        findNavController().navigate(R.id.action_MealListFragment_to_EditMealFragment)
-                    }
-
-                    binding.container.findViewById<ImageButton>(btnDel.id).setOnClickListener { btn ->
-                        lifecycleScope.launch {
-                            planerDao.deleteMealById(btn.tag as Long)
-                            findNavController().navigate(R.id.action_MealListFragment_to_self)
-                        }
-
-                    }
+                    items.add(DynamicItem.MealListItem(meal = meal.name, btnTag = meal.id))
                 }
-
+                val adapter = MealListAdapter(items)
+                recyclerView.adapter = adapter
+                adapter.onMealClickListener = context
             }
 
-        }
-
-
-        binding.buttonThird.setOnClickListener {
-            findNavController().navigate(R.id.action_MealListFragment_to_AddMealFragment)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onMealClick(btnTag: Long, isDeleteButton: Boolean?) {
+        val planerDao = PlanerDatabase.getDatabase(requireContext()).planerDao()
+
+        if (isDeleteButton!!) {
+            lifecycleScope.launch {
+                planerDao.deleteMealById(btnTag)
+                findNavController().navigate(R.id.action_MealListFragment_to_self)
+            }
+        } else {
+            viewModel.mealId = btnTag
+            findNavController().navigate(R.id.action_MealListFragment_to_EditMealFragment)
+        }
+
     }
 
 

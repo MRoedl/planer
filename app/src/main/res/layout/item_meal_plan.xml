@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+    android:layout_gravity="center"
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/mealIdTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/dateTextView"
         android:layout_height="wrap_content"
-        android:text="Meal ID: " />
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="" />
 
     <TextView
-        android:id="@+id/maxDateTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/mealTextView"
         android:layout_height="wrap_content"
-        android:text="Max Date: " />
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:src="@drawable/edit"
+        android:layout_weight="0.5" />
+
 </LinearLayout>

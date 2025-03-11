@@ -12,6 +12,12 @@
         android:orientation="vertical"
         tools:layout_editor_absoluteY="16dp"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView">
+    </androidx.recyclerview.widget.RecyclerView>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,8 +32,6 @@
             android:src="@drawable/add"
             android:background="@drawable/roundcorner"
              />
-
-
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

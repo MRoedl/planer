@@ -158,7 +158,7 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
 
                 // 4. Füge die TextViews zur horizontalen LinearLayout hinzu
                 withContext(Dispatchers.Main) {
-                    items.add(DynamicItem.MealListItem(pColor = pColor, ptvMealText = ptvMealText, pbtnEditTag = pbtnEditTag, ptVText = ptVText, pbtnEditId = pbtnEditId))
+                    items.add(DynamicItem.MealPlanItem(pColor = pColor, ptvMealText = ptvMealText, pbtnEditTag = pbtnEditTag, ptVText = ptVText, pbtnEditId = pbtnEditId))
                 }
             }
 
@@ -171,13 +171,11 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
 
             recyclerView.scrollToPosition(todayPos)
         }
-        //recyclerView.smoothScrollBy(0, 1000)
-
 
     }
 
 
-    override fun onMealClick(btnTag: Long) {
+    override fun onMealClick(btnTag: Long, unused: Boolean?) {
         var meals: List<MealEntity> = listOf()
 
         lifecycleScope.launch {
