@@ -67,7 +67,7 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
 
         // Show the loading indicator
         binding.progressBar.visibility = View.VISIBLE
-        binding.containerForDynamicRows.visibility = View.GONE
+        binding.recyclerView.visibility = View.GONE
 
         planerDao = PlanerDatabase.getDatabase(requireContext()).planerDao()
 
@@ -167,7 +167,7 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
             adapter.onMealClickListener = context
 
             binding.progressBar.visibility = View.GONE
-            binding.containerForDynamicRows.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.VISIBLE
 
             recyclerView.scrollToPosition(todayPos)
         }
