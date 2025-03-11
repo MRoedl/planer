@@ -7,13 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.planer.R
 
 sealed class DynamicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    class TextViewHolder(itemView: View) : DynamicViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.textView)
-    }
-
-    class ImageViewHolder(itemView: View) : DynamicViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.imageView)
-    }
 
     class MealPlanViewHolder(itemView: View) : DynamicViewHolder(itemView) {
         val mealIdTextView: TextView = itemView.findViewById(R.id.mealIdTextView)

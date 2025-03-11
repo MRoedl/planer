@@ -27,16 +27,12 @@ class MealListAdapter(private val items: List<DynamicItem>) :
     var onMealClickListener: OnMealClickListener? = null
 
     companion object {
-        private const val VIEW_TYPE_TEXT = 0
-        private const val VIEW_TYPE_IMAGE = 1
-        private const val VIEW_TYPE_MEAL_PLAN = 2
-        private const val VIEW_TYPE_MEAL_LIST = 3
+        private const val VIEW_TYPE_MEAL_PLAN = 0
+        private const val VIEW_TYPE_MEAL_LIST = 1
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
-            is DynamicItem.TextItem -> VIEW_TYPE_TEXT
-            is DynamicItem.ImageItem -> VIEW_TYPE_IMAGE
             is DynamicItem.MealPlanItem -> VIEW_TYPE_MEAL_PLAN
             is DynamicItem.MealListItem -> VIEW_TYPE_MEAL_LIST
         }
@@ -45,14 +41,6 @@ class MealListAdapter(private val items: List<DynamicItem>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DynamicViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_TEXT -> {
-                val view = inflater.inflate(R.layout.item_text, parent, false)
-                DynamicViewHolder.TextViewHolder(view)
-            }
-            VIEW_TYPE_IMAGE -> {
-                val view = inflater.inflate(R.layout.item_image, parent, false)
-                DynamicViewHolder.ImageViewHolder(view)
-            }
             VIEW_TYPE_MEAL_PLAN -> {
                 val view = inflater.inflate(R.layout.item_meal_plan, parent, false)
                 DynamicViewHolder.MealPlanViewHolder(view)
@@ -67,16 +55,6 @@ class MealListAdapter(private val items: List<DynamicItem>) :
 
     override fun onBindViewHolder(holder: DynamicViewHolder, position: Int) {
         when (val item = items[position]) {
-            is DynamicItem.TextItem -> {
-                val textHolder = holder as DynamicViewHolder.TextViewHolder
-                textHolder.textView.text = item.text
-            }
-            is DynamicItem.ImageItem -> {
-                val imageHolder = holder as DynamicViewHolder.ImageViewHolder
-//                Glide.with(imageHolder.itemView.context)
-//                    .load(item.imageUrl)
-//                    .into(imageHolder.imageView)
-            }
             is DynamicItem.MealPlanItem -> {
                 val mealPlanHolder = holder as DynamicViewHolder.MealPlanViewHolder
                 mealPlanHolder.mealIdTextView.text = "Meal ID: ${item.meal}"

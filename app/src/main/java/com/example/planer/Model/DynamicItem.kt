@@ -2,8 +2,6 @@ package com.example.planer.Model
 
 // Basisklasse oder Interface
 sealed class DynamicItem {
-    data class TextItem(val text: String) : DynamicItem()
-    data class ImageItem(val imageUrl: String) : DynamicItem()
     data class MealPlanItem(val id: Long, val meal: Long, val maxDate: Long?) : DynamicItem()
 
     data class MealListItem(
