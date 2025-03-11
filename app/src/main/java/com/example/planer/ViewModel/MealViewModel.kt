@@ -7,4 +7,6 @@ class MealViewModel : ViewModel() {
 
     var mealId: Long = 0
 
+
+
 }
