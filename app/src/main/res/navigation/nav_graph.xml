@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/HomeFragment"
         android:name="com.example.planer.ui.HomeFragment"
-        android:label="Home"
+        android:label="Planer"
         tools:layout="@layout/fragment_home">
 
         <action
@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/AddMealFragment"
         android:name="com.example.planer.ui.AddMealFragment"
-        android:label="Add Meal"
+        android:label="Gericht hinzufügen"
         tools:layout="@layout/fragment_add_meal">
 
         <action
@@ -37,7 +37,7 @@
     <fragment
         android:id="@+id/MealListFragment"
         android:name="com.example.planer.ui.MealListFragment"
-        android:label="Meals"
+        android:label="Gerichte"
         tools:layout="@layout/fragment_meal_list" >
         <action
             android:id="@+id/action_MealListFragment_to_HomeFragment"
@@ -55,7 +55,7 @@
     <fragment
         android:id="@+id/EditMealFragment"
         android:name="com.example.planer.ui.EditMealFragment"
-        android:label="fragment_edit_meal"
+        android:label="Gericht bearbeiten"
         tools:layout="@layout/fragment_edit_meal" >
         <action
             android:id="@+id/action_EditMealFragment_to_MealListFragment"
