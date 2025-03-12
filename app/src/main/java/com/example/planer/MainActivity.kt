@@ -19,6 +19,8 @@ import com.example.planer.database.PlanerDatabase
 import com.example.planer.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.Calendar
 import java.util.Locale
 import kotlin.random.Random
@@ -67,6 +69,11 @@ class MainActivity : AppCompatActivity() {
             R.id.action_refresh -> {
                 Log.d("NACHRICHT", "Refresh clicked")
                 findNavController(R.id.nav_host_fragment_content_main).navigate(navController.currentDestination!!.id)
+                true
+            }
+            R.id.action_recalc -> {
+                Log.d("NACHRICHT", "Recalc clicked")
+                recalcMealPlan()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -124,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if (meals == null || meals.isEmpty()) {
-                    continue
+                    break
                 }
 
                 var mealsToChoiceFrom: MutableMap<Int, MealEntity> = mutableMapOf<Int, MealEntity>()
@@ -135,8 +142,8 @@ class MainActivity : AppCompatActivity() {
                 for (meal in meals) {
                     popularity = meal.popularity
                     meal.lastEaten?.let {
-                        if (it >= (current.timeInMillis - 86400000 * 4)) {
-                            popularity += 10 * ((current.timeInMillis - it) / 86400000).toInt()
+                        if (it <= (current.timeInMillis - 86400000 * 4)) {
+                            popularity += 10 * ((current.timeInMillis - it) / 86400000).toInt() + 10
                         }
                     }
                     sumPopularity += popularity
@@ -146,7 +153,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 //zufallszahl zwischen 0 und sumPopularity
-                var randomNum = Random.nextInt(0, sumPopularity)
+                if (sumPopularity < 1) {
+                    break
+                }
+                var randomNum = 0
                 var fin = false
                 var meal: MealEntity? = null
                 var mealKey = 0
@@ -184,7 +194,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if (meal == null) {
-                    continue
+                    break
                 }
 
                 planerDao.insert(MealPlanEntity(date = current.timeInMillis, meal = meal.id))
@@ -199,6 +209,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun recalcMealPlan() {
+        val planerDao: PlanerDao = PlanerDatabase.getDatabase(this).planerDao()
+        lifecycleScope.launch {
+            // 1. Aktuelles Datum und Zeit als ZonedDateTime erhalten
+            val now = ZonedDateTime.now(ZoneId.systemDefault())
+
+            // 2. Einen Tag hinzufügen
+            val tomorrow = now.plusDays(1)
+
+            // 3. Zeit auf Tagesbeginn setzen
+            val tomorrowStartOfDay = tomorrow
+                .withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0)
+
+            // 4. ZonedDateTime in Instant umwandeln
+            val tomorrowStartOfDayInstant = tomorrowStartOfDay.toInstant()
+
+            // 5. Instant in Unix-Timestamp umwandeln
+            val timestamp = tomorrowStartOfDayInstant.epochSecond
+
+            planerDao.deleteMealPlanByMinDate(timestamp)
+            updateAllLastEaten()
+            calcMealPlan()
+
+            //reload
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            findNavController(R.id.nav_host_fragment_content_main).navigate(navController.currentDestination!!.id)
+        }
+
+    }
+
     fun findMealWithMap(meals: MutableMap<Int, MealEntity>, randomNum: Int): Int {
         val keys = meals.keys.sorted()
         if (keys.size == 1) return keys[0]
@@ -211,12 +255,13 @@ class MainActivity : AppCompatActivity() {
         return 0
     }
 
-    //todo testen
+    //todo testen, optimieren (reset / update)
     fun updateAllLastEaten() {
         val planerDao: PlanerDao = PlanerDatabase.getDatabase(this).planerDao()
 
         lifecycleScope.launch {
             val mealsPlanLastEaten = planerDao.getLastEaten()
+            planerDao.resetLastEaten()
 
             for (mealPlan in mealsPlanLastEaten) {
                 planerDao.updateLastEaten(mealPlan.date, mealPlan.meal)

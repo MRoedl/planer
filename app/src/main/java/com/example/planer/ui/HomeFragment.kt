@@ -157,12 +157,11 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
             recyclerView.adapter = adapter
             adapter.onMealClickListener = context
 
-            binding.progressBar.visibility = View.GONE
-            binding.recyclerView.visibility = View.VISIBLE
-
             recyclerView.scrollToPosition(todayPos)
         }
 
+        binding.progressBar.visibility = View.GONE
+        binding.recyclerView.visibility = View.VISIBLE
     }
 
 

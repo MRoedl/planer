@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.planer.MainActivity">
     <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="100"
+        android:title="@string/Planer"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -10,8 +15,8 @@
         android:title="@string/meal_list"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_refresh"
+        android:id="@+id/action_recalc"
         android:orderInCategory="100"
-        android:title="@string/Planer"
+        android:title="@string/plan_recalc"
         app:showAsAction="never" />
 </menu>
