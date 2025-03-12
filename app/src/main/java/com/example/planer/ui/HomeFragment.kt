@@ -3,48 +3,39 @@ package com.example.planer.ui
 import MealListAdapter
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import com.example.planer.databinding.FragmentHomeBinding
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.planer.MainActivity
 import com.example.planer.Model.DynamicItem
 import com.example.planer.R
 import com.example.planer.ViewModel.MealViewModel
-import com.example.planer.database.PlanerDao
-import com.example.planer.database.PlanerDatabase
 import com.example.planer.database.MealEntity
 import com.example.planer.database.MealPlanEntity
-import kotlinx.coroutines.joinAll
+import com.example.planer.database.PlanerDao
+import com.example.planer.database.PlanerDatabase
+import com.example.planer.databinding.FragmentHomeBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import kotlin.collections.mutableListOf
 import kotlin.getValue
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
 
-    // todo: Plan bearbeiten / Gerichte austauschen, verschieben
-    // Verlauf von Gerichten
-    // Statistiken zu Gerichten (wie oft, Wert / Prozentual)
-    // Algo für Plan erstellung anpassen (Wochentage, gewichtung für Wahrscheinlichkeit)
+    // todo: Statistiken zu Gerichten (wie oft, Wert / Prozentual)
 
     private var _binding: FragmentHomeBinding? = null
 

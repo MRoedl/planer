@@ -2,29 +2,26 @@ package com.example.planer
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
 import androidx.room.Room
-import com.example.planer.database.PlanerDao
-import com.example.planer.database.PlanerDatabase
 import com.example.planer.database.MealEntity
 import com.example.planer.database.MealPlanEntity
+import com.example.planer.database.PlanerDao
+import com.example.planer.database.PlanerDatabase
 import com.example.planer.databinding.ActivityMainBinding
-import com.example.planer.ui.HomeFragment
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
-import kotlin.enums.enumEntries
+import java.util.Locale
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,15 +43,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        //replaceFragment(HomeFragment())
-//        binding.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null)
-//                .setAnchorView(R.id.fab).show()
-//            
-//
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -74,15 +62,11 @@ class MainActivity : AppCompatActivity() {
                 Log.d("NACHRICHT", "Settings clicked")
                 val navController2 = findNavController(R.id.nav_host_fragment_content_main)
                 navController2.navigate(R.id.MealListFragment)
-
                 true
             }
             R.id.action_refresh -> {
                 Log.d("NACHRICHT", "Refresh clicked")
-                //calcMealPlan()
-                //navController.navigate(navController.currentDestination!!.id)
                 findNavController(R.id.nav_host_fragment_content_main).navigate(navController.currentDestination!!.id)
-                //todo refresh
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -95,15 +79,10 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-    fun calcMealPlan() { //todo lastEating variablen rausnehmen und durch abfragen ermitteln
+    fun calcMealPlan() {
         val planerDao: PlanerDao = PlanerDatabase.getDatabase(this).planerDao()
 
         insertMealPlan = lifecycleScope.launch {
-//            planerDao.deleteAllMeals()
-            //todo for testing
-            //planerDao.deleteMealPlan()
-            //planerDao.resetLastEaten()
-
             updateAllLastEaten()
 
             val mealPlan: MealPlanEntity? = planerDao.getLatestMealPlan()
@@ -125,7 +104,11 @@ class MainActivity : AppCompatActivity() {
             var weekDay = calendar.get(Calendar.DAY_OF_WEEK)
             var meals: List<MealEntity>? = null
 
-            while (current <= dayInaWeek) {
+            val formatter = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
+            var currentFormated = formatter.format(current.time)
+            var dayInaWeekFormated = formatter.format(dayInaWeek.time)
+
+            while (currentFormated <= dayInaWeekFormated) {
                 //for (i in 1..7) {
                 weekDay = current.get(Calendar.DAY_OF_WEEK)
 
@@ -173,7 +156,6 @@ class MainActivity : AppCompatActivity() {
 
                     mealKey = findMealWithMap(mealsToChoiceFrom, randomNum)
                     meal = mealsToChoiceFrom[mealKey]
-                    //meal = findMeal(meals, randomNum)
 
                     if (meal == null) continue
 
@@ -211,21 +193,10 @@ class MainActivity : AppCompatActivity() {
                 Log.d("NACHRICHT", "Added meal to mealPlan: ${meal.name}")
 
                 current.add(Calendar.DAY_OF_MONTH, 1)
+                currentFormated = formatter.format(current.time)
             }
 
         }
-    }
-
-    fun findMeal(meals: List<MealEntity>, randomNum: Int): MealEntity? {
-        var randomNum = randomNum
-        for (meal in meals) {
-            randomNum -= meal.popularity
-            if (randomNum <= 0) {
-                //meal found
-                return meal
-            }
-        }
-        return null
     }
 
     fun findMealWithMap(meals: MutableMap<Int, MealEntity>, randomNum: Int): Int {
@@ -246,17 +217,12 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val mealsPlanLastEaten = planerDao.getLastEaten()
-//            val mealPlans = planerDao.getMealPlan()
-//            mealPlans.maxBy { it.date }
-//            mealPlans.groupBy { it.meal }
 
             for (mealPlan in mealsPlanLastEaten) {
                 planerDao.updateLastEaten(mealPlan.date, mealPlan.meal)
                 Log.d("NACHRICHT", "Last eaten: ${mealPlan.date}")
             }
-
         }
-
     }
 
 }
