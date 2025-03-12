@@ -29,6 +29,7 @@
             android:layout_gravity="bottom|right"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="32dp"
+            android:backgroundTint="@color/highlighted"
             android:src="@drawable/add"
             android:background="@drawable/roundcorner"
              />

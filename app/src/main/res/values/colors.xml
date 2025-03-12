@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="highlighted">#7F3D6EF5</color>
-    <color name="past">#80473DF5</color>
-    <color name="future">#803DA8F5</color>
-    <color name="background">#8FAAF5</color>
+    <color name="black">#1A1A1A</color>
+    <color name="white">#E4E4E4</color>
+    <color name="hintWhite">#80E4E4E4</color>
+    <color name="highlighted">#DD584B</color>
+    <color name="past">#392E2D</color>
+    <color name="future">#A88A62</color>
+    <color name="background">#392E2D</color>
+    <color name="toolbar">#7A4777</color>
+    <color name="toolbarText">#3E243C</color>
+    <color name="iconEdit">#C8C8C8</color>
+    <color name="iconDelete">#B40000</color>
     <color name="transparent">#00000000</color>
     <color name="text">#00C3C3C3</color>
     <color name="c1">#3DA8F5</color>
@@ -14,8 +19,9 @@
     <color name="c4">#3DE2F5</color>
     <color name="c5">#833DF5</color>
     <color name="a1">#DD584B</color>
-    <color name="a2">#F6EBB8</color>
+    <color name="a2">#D9B27E</color>
     <color name="a3">#A88A62</color>
     <color name="a4">#392E2D</color>
     <color name="a5">#3E243C</color>
+    <color name="a6">#7A4777</color>
 </resources>

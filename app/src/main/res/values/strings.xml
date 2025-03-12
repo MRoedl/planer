@@ -142,4 +142,6 @@
     <string name="zutaten">Zutaten</string>
     <string name="infos">Infos</string>
     <string name="Planer">Planer</string>
+    <string name="hinzuf_gen">Hinzufügen</string>
+    <string name="ndern">Ändern</string>
 </resources>
