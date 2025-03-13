@@ -5,14 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.planer.Model.DynamicItem
 import com.example.planer.R
@@ -89,9 +86,26 @@ class MealListFragment : Fragment(), MealListAdapter.OnMealClickListener {
 
         if (isDeleteButton!!) {
             lifecycleScope.launch {
-                planerDao.deleteMealById(btnTag)
-                findNavController().navigate(R.id.action_MealListFragment_to_self)
+                val mealName = planerDao.getMealById(btnTag).name
+
+                val builder = AlertDialog.Builder(requireContext())
+                builder
+                    .setTitle("$mealName löschen")
+                    .setMessage("Sind Sie sicher, dass Sie $mealName löschen möchten?")
+                    .setNegativeButton("Abbrechen") { dialog, which ->
+                        dialog.cancel()
+                    }
+                    .setPositiveButton("Löschen") { dialog, which ->
+                        lifecycleScope.launch {
+                            planerDao.deleteMealById(btnTag)
+                            findNavController().navigate(R.id.action_MealListFragment_to_self)
+                        }
+                    }
+
+                val dialog = builder.create()
+                dialog.show()
             }
+
         } else {
             viewModel.mealId = btnTag
             findNavController().navigate(R.id.action_MealListFragment_to_EditMealFragment)

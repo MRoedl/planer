@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -75,7 +76,18 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_recalc -> {
                 Log.d("NACHRICHT", "Recalc clicked")
-                recalcMealPlan()
+                val builder = AlertDialog.Builder(this)
+                builder
+                    .setTitle("Plan neu erstellen")
+                    .setMessage("Sind Sie sicher, dass Sie den Plan neu erstellen möchten?")
+                    .setNegativeButton("Abbrechen") { dialog, which ->
+                        dialog.cancel()
+                    }
+                    .setPositiveButton("Berechnen") { dialog, which ->
+                        recalcMealPlan()
+                    }
+                val dialog = builder.create()
+                dialog.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
