@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var insertMealPlan: kotlinx.coroutines.Job
 
+    //todo sync mit anderen Geräten
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -143,7 +145,7 @@ class MainActivity : AppCompatActivity() {
                     popularity = meal.popularity
                     meal.lastEaten?.let {
                         if (it <= (current.timeInMillis - 86400000 * 4)) {
-                            popularity += 10 * ((current.timeInMillis - it) / 86400000).toInt() + 10
+                            popularity += 10 * ((current.timeInMillis - it) / 86400000).toInt()
                         }
                     }
                     sumPopularity += popularity
