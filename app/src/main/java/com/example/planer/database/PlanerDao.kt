@@ -5,8 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
 
 @Dao
 interface PlanerDao {
@@ -19,6 +17,9 @@ interface PlanerDao {
 
     @Delete
     suspend fun delete(meal: MealEntity)
+
+    @Insert
+    suspend fun insertAllMeals(meals: List<MealEntity>)
 
     @Query("SELECT * FROM meals_table")
     suspend fun getAllMeals(): List<MealEntity>
@@ -90,6 +91,9 @@ interface PlanerDao {
     @Update
     suspend fun update(mealPlanEntity: MealPlanEntity)
 
+    @Insert
+    suspend fun insertAllMealPlans(mealPlans: List<MealPlanEntity>)
+
     @Query("UPDATE mealPlan_table SET meal = :meal WHERE id = :id")
     suspend fun updateById(id: Long, meal: Long)
 
@@ -109,7 +113,7 @@ interface PlanerDao {
     suspend fun getLatestMealPlan(): MealPlanEntity?
 
     @Query("DELETE FROM mealPlan_table")
-    suspend fun deleteMealPlan()
+    suspend fun deleteAllMealPlans()
 
     @Query("DELETE FROM mealPlan_table WHERE id = :id")
     suspend fun deleteMealPlanById(id: Long)
@@ -117,6 +121,6 @@ interface PlanerDao {
     @Query("DELETE FROM mealPlan_table WHERE date > :date")
     suspend fun deleteMealPlanByMinDate(date: Long)
 
-    @Query("DELETE FROM SQLITE_SEQUENCE WHERE name='mealPlan_table'")
-    suspend fun resetAutoIncrement()
+//    @Query("DELETE FROM SQLITE_SEQUENCE WHERE name='mealPlan_table'")
+//    suspend fun resetAutoIncrement()
 }

@@ -145,4 +145,6 @@
     <string name="hinzuf_gen">Hinzufügen</string>
     <string name="ndern">Ändern</string>
     <string name="plan_recalc">Plan neu berechnen</string>
+    <string name="save">Save</string>
+    <string name="load">Load</string>
 </resources>

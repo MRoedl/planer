@@ -17,6 +17,17 @@
     <item
         android:id="@+id/action_recalc"
         android:orderInCategory="100"
+
         android:title="@string/plan_recalc"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_save"
+        android:orderInCategory="100"
+        android:title="@string/save"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_load"
+        android:orderInCategory="100"
+        android:title="@string/load"
         app:showAsAction="never" />
 </menu>

@@ -82,4 +82,8 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation("androidx.room:room-paging:$room_version")
+
+    // ... andere Abhängigkeiten ...
+    implementation("commons-net:commons-net:3.9.0")
+    implementation("com.google.code.gson:gson:2.10.1")
 }

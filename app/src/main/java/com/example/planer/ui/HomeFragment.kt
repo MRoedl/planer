@@ -36,6 +36,7 @@ import kotlin.getValue
 class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
 
     // todo: Statistiken zu Gerichten (wie oft, Wert / Prozentual)
+    //todo ftp (ftpuser, 61*1NcQG%eat)
 
     private var _binding: FragmentHomeBinding? = null
 

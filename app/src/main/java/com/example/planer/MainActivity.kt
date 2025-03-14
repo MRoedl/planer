@@ -13,12 +13,15 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.room.Room
+import com.example.planer.database.JsonConverter
 import com.example.planer.database.MealEntity
 import com.example.planer.database.MealPlanEntity
 import com.example.planer.database.PlanerDao
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.databinding.ActivityMainBinding
+import com.example.planer.ftp.FtpManager
 import kotlinx.coroutines.launch
+import java.io.File
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -88,6 +91,17 @@ class MainActivity : AppCompatActivity() {
                     }
                 val dialog = builder.create()
                 dialog.show()
+                true
+            }
+            R.id.action_save -> {
+                Log.d("NACHRICHT", "Sync clicked")
+                save()
+                true
+            }
+            R.id.action_load -> {
+                Log.d("NACHRICHT", "Sync clicked")
+                load()
+                findNavController(R.id.nav_host_fragment_content_main).navigate(navController.currentDestination!!.id)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -220,6 +234,52 @@ class MainActivity : AppCompatActivity() {
                 currentFormated = formatter.format(current.time)
             }
 
+        }
+    }
+
+    fun load() {
+        val ftpmanager = FtpManager()
+        lifecycleScope.launch {
+            val server = "192.168.178.1"
+            val port = 21
+            val user = "ftpuser"
+            val pass = "61*1NcQG%eat"
+            ftpmanager.connect(server, port, user, pass)
+
+            val deviceFilePath = this@MainActivity.filesDir.absolutePath + "/db2.json"
+            val file = File(deviceFilePath)
+            val serverFilePath = "/Dokumente/db.json"
+            val success = ftpmanager.downloadFile(serverFilePath, file)
+
+            if (success) {
+                val planerDao = PlanerDatabase.getDatabase(this@MainActivity).planerDao()
+                planerDao.deleteAllMeals()
+                planerDao.deleteAllMealPlans()
+
+                JsonConverter().importDatabaseFromJson(PlanerDatabase.getDatabase(this@MainActivity), deviceFilePath)
+            }
+
+            ftpmanager.disconnect()
+        }
+    }
+
+    fun save() {
+        val ftpmanager = FtpManager()
+        lifecycleScope.launch {
+            //todo
+            val server = "192.168.178.1"
+            val port = 21
+            val user = "ftpuser"
+            val pass = "61*1NcQG%eat"
+            ftpmanager.connect(server, port, user, pass)
+
+            val deviceFilePath = this@MainActivity.filesDir.absolutePath + "/db.json"
+            val file = JsonConverter().exportDatabaseToJson(PlanerDatabase.getDatabase(this@MainActivity), deviceFilePath)
+            //todo abfrage
+            val serverFilePath = "/Dokumente/db.json"
+            if (file != null) ftpmanager.uploadFile(file, serverFilePath)
+
+            ftpmanager.disconnect()
         }
     }
 
