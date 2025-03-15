@@ -143,8 +143,6 @@ class MainActivity : AppCompatActivity() {
             var dayInaWeek = Calendar.getInstance()
             dayInaWeek.add(Calendar.DAY_OF_MONTH, daysToPlan)
 
-            //val totalMeals = planerDao.getMealCount()
-
             val calendar = Calendar.getInstance()
             var weekDay = calendar.get(Calendar.DAY_OF_WEEK)
             var meals: List<MealEntity>? = null
@@ -154,7 +152,6 @@ class MainActivity : AppCompatActivity() {
             var dayInaWeekFormated = formatter.format(dayInaWeek.time)
 
             while (currentFormated <= dayInaWeekFormated) {
-                //for (i in 1..7) {
                 weekDay = current.get(Calendar.DAY_OF_WEEK)
 
                 meals = when (weekDay) {
