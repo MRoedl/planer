@@ -13,15 +13,15 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.room.Room
-import com.example.planer.database.JsonConverter
+import com.example.planer.ViewModel.AppDataStore
+import com.example.planer.ViewModel.MealViewModel
 import com.example.planer.database.MealEntity
 import com.example.planer.database.MealPlanEntity
 import com.example.planer.database.PlanerDao
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.databinding.ActivityMainBinding
-import com.example.planer.ftp.FtpManager
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.io.File
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     lateinit var insertMealPlan: kotlinx.coroutines.Job
+    lateinit var loadSettingsJob: kotlinx.coroutines.Job
+    private var daysToPlan: Int = 7
 
     //todo sync mit anderen Geräten
 
@@ -41,7 +43,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         Room.databaseBuilder(this, PlanerDatabase::class.java, "meal_database").build()
+
+        lifecycleScope.launch {
+            loadSettings()
+        }
+
+        test()
         calcMealPlan()
+
+        MealViewModel().filePath = this@MainActivity.filesDir.absolutePath
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -66,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         return when (item.itemId) {
-            R.id.action_settings -> {
+            R.id.action_meals -> {
                 Log.d("NACHRICHT", "Settings clicked")
                 val navController2 = findNavController(R.id.nav_host_fragment_content_main)
                 navController2.navigate(R.id.MealListFragment)
@@ -93,15 +103,10 @@ class MainActivity : AppCompatActivity() {
                 dialog.show()
                 true
             }
-            R.id.action_save -> {
-                Log.d("NACHRICHT", "Sync clicked")
-                save()
-                true
-            }
-            R.id.action_load -> {
-                Log.d("NACHRICHT", "Sync clicked")
-                load()
-                findNavController(R.id.nav_host_fragment_content_main).navigate(navController.currentDestination!!.id)
+            R.id.action_settings -> {
+                Log.d("NACHRICHT", "Settings clicked")
+                val navController2 = findNavController(R.id.nav_host_fragment_content_main)
+                navController2.navigate(R.id.SettingsFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -114,10 +119,24 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
+    suspend fun loadSettings() {
+        val appDataStore = AppDataStore.getInstance(this)
+
+        val days = appDataStore.getDaysToPlan().first()
+
+        if (days == null || days <= 0) {
+            appDataStore.setDaysToPlan(7)
+            daysToPlan = 7
+        } else {
+            daysToPlan = days.toInt()
+        }
+    }
+
     fun calcMealPlan() {
         val planerDao: PlanerDao = PlanerDatabase.getDatabase(this).planerDao()
 
         insertMealPlan = lifecycleScope.launch {
+            loadSettings()
             updateAllLastEaten()
 
             val mealPlan: MealPlanEntity? = planerDao.getLatestMealPlan()
@@ -131,7 +150,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             var dayInaWeek = Calendar.getInstance()
-            dayInaWeek.add(Calendar.DAY_OF_MONTH, 7)
+            dayInaWeek.add(Calendar.DAY_OF_MONTH, daysToPlan)
 
             //val totalMeals = planerDao.getMealCount()
 
@@ -234,52 +253,6 @@ class MainActivity : AppCompatActivity() {
                 currentFormated = formatter.format(current.time)
             }
 
-        }
-    }
-
-    fun load() {
-        val ftpmanager = FtpManager()
-        lifecycleScope.launch {
-            val server = "192.168.178.1"
-            val port = 21
-            val user = "ftpuser"
-            val pass = "61*1NcQG%eat"
-            ftpmanager.connect(server, port, user, pass)
-
-            val deviceFilePath = this@MainActivity.filesDir.absolutePath + "/db2.json"
-            val file = File(deviceFilePath)
-            val serverFilePath = "/Dokumente/db.json"
-            val success = ftpmanager.downloadFile(serverFilePath, file)
-
-            if (success) {
-                val planerDao = PlanerDatabase.getDatabase(this@MainActivity).planerDao()
-                planerDao.deleteAllMeals()
-                planerDao.deleteAllMealPlans()
-
-                JsonConverter().importDatabaseFromJson(PlanerDatabase.getDatabase(this@MainActivity), deviceFilePath)
-            }
-
-            ftpmanager.disconnect()
-        }
-    }
-
-    fun save() {
-        val ftpmanager = FtpManager()
-        lifecycleScope.launch {
-            //todo
-            val server = "192.168.178.1"
-            val port = 21
-            val user = "ftpuser"
-            val pass = "61*1NcQG%eat"
-            ftpmanager.connect(server, port, user, pass)
-
-            val deviceFilePath = this@MainActivity.filesDir.absolutePath + "/db.json"
-            val file = JsonConverter().exportDatabaseToJson(PlanerDatabase.getDatabase(this@MainActivity), deviceFilePath)
-            //todo abfrage
-            val serverFilePath = "/Dokumente/db.json"
-            if (file != null) ftpmanager.uploadFile(file, serverFilePath)
-
-            ftpmanager.disconnect()
         }
     }
 

@@ -11,13 +11,12 @@ import java.io.FileOutputStream
 
 class FtpManager {
     private val ftpClient = FTPClient()
+    private val server = "192.168.178.1"
+    private val port = 21
+    private val user = "ftpuser"
+    private val pass = "61*1NcQG%eat"
 
-    suspend fun connect(
-        server: String,
-        port: Int,
-        user: String,
-        pass: String
-    ): Boolean = withContext(Dispatchers.IO) {
+    suspend fun connect(): Boolean = withContext(Dispatchers.IO) {
         return@withContext try {
             ftpClient.connect(server, port)
             ftpClient.login(user, pass)

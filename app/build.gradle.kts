@@ -83,6 +83,12 @@ dependencies {
     // optional - Paging 3 Integration
     implementation("androidx.room:room-paging:$room_version")
 
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
     // ... andere Abhängigkeiten ...
     implementation("commons-net:commons-net:3.9.0")
     implementation("com.google.code.gson:gson:2.10.1")

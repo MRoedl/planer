@@ -61,4 +61,10 @@
             android:id="@+id/action_EditMealFragment_to_MealListFragment"
             app:destination="@id/MealListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/SettingsFragment"
+        android:name="com.example.planer.ui.SettingsFragment"
+        android:label="Einstellungen"
+        tools:layout="@layout/fragment_settings" >
+    </fragment>
 </navigation>

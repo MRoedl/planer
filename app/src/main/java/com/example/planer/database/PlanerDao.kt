@@ -100,7 +100,7 @@ interface PlanerDao {
     @Query("SELECT id, meal, max(date) as date FROM mealPlan_table GROUP BY meal")
     suspend fun getLastEaten(): List<MealPlanEntity>
 
-    @Query("SELECT * FROM mealPlan_table")
+    @Query("SELECT * FROM mealPlan_table ORDER BY date")
     suspend fun getMealPlan(): List<MealPlanEntity>
 
     @Query("SELECT * FROM mealPlan_table WHERE id = :id")

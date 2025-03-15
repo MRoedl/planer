@@ -93,7 +93,7 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
                 calendar.timeInMillis = mealPlanEntity.date
 
                 val formatter1 = SimpleDateFormat("dd.MM", Locale.getDefault())
-                val formatter2 = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
+                val formatter2 = SimpleDateFormat("YYYY.MM.dd", Locale.getDefault())
                 val formattedDate1 = formatter1.format(calendar.time)
                 val currentDateFormated = formatter2.format(calendar.time)
                 val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
