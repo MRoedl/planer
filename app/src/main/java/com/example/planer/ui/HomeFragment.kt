@@ -1,5 +1,6 @@
 package com.example.planer.ui
 
+import MealListAdapter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.planer.MainActivity
 import com.example.planer.Model.DynamicItem
-import com.example.planer.Model.MealListAdapter
 import com.example.planer.R
 import com.example.planer.ViewModel.MealViewModel
 import com.example.planer.database.MealEntity
