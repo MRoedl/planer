@@ -42,10 +42,6 @@ class MainActivity : AppCompatActivity() {
 
         Room.databaseBuilder(this, PlanerDatabase::class.java, "meal_database").build()
 
-//        lifecycleScope.launch {
-//            loadSettings()
-//        }
-
         calcMealPlan()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
