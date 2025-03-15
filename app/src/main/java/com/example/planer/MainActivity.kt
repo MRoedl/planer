@@ -44,11 +44,10 @@ class MainActivity : AppCompatActivity() {
 
         Room.databaseBuilder(this, PlanerDatabase::class.java, "meal_database").build()
 
-        lifecycleScope.launch {
-            loadSettings()
-        }
+//        lifecycleScope.launch {
+//            loadSettings()
+//        }
 
-        test()
         calcMealPlan()
 
         MealViewModel().filePath = this@MainActivity.filesDir.absolutePath
@@ -158,7 +157,7 @@ class MainActivity : AppCompatActivity() {
             var weekDay = calendar.get(Calendar.DAY_OF_WEEK)
             var meals: List<MealEntity>? = null
 
-            val formatter = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
+            val formatter = SimpleDateFormat("YYYY.MM.dd", Locale.getDefault())
             var currentFormated = formatter.format(current.time)
             var dayInaWeekFormated = formatter.format(dayInaWeek.time)
 
