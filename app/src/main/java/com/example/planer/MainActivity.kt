@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     lateinit var insertMealPlan: kotlinx.coroutines.Job
+    lateinit var loadSettingsJob: kotlinx.coroutines.Job
     private var daysToPlan: Int = 7
 
     //todo sync mit anderen Geräten

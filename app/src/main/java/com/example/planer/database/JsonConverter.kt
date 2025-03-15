@@ -65,6 +65,7 @@ class JsonConverter() {
                 // Daten in die Datenbank einfügen
                 val planerDao = database.planerDao()
 
+                //todo alte löschen
                 planerDao.insertAllMeals(meals)
                 planerDao.insertAllMealPlans(mealPlans)
 

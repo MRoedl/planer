@@ -2,16 +2,16 @@ package com.example.planer.ui
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.planer.R
-import com.example.planer.database.MealEntity
 import com.example.planer.database.PlanerDao
+import com.example.planer.R
 import com.example.planer.database.PlanerDatabase
+import com.example.planer.database.MealEntity
 import com.example.planer.databinding.FragmentAddMealBinding
 import kotlinx.coroutines.launch
 
@@ -30,8 +30,10 @@ class AddMealFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         _binding = FragmentAddMealBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

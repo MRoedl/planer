@@ -1,5 +1,6 @@
 package com.example.planer.ui
 
+import MealListAdapter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.planer.MainActivity
 import com.example.planer.Model.DynamicItem
-import com.example.planer.Model.MealListAdapter
 import com.example.planer.R
+import com.example.planer.ViewModel.MealViewModel
 import com.example.planer.database.MealEntity
 import com.example.planer.database.MealPlanEntity
 import com.example.planer.database.PlanerDao
@@ -26,6 +28,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import kotlin.collections.mutableListOf
+import kotlin.getValue
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -40,6 +43,7 @@ class HomeFragment : Fragment(), MealListAdapter.OnMealClickListener {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val viewModel: MealViewModel by activityViewModels()
     private var planerDao: PlanerDao? = null
 
     override fun onCreateView(
