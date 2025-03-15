@@ -36,7 +36,6 @@ class JsonConverter() {
                 }
 
                 Log.d("DatabaseToJsonConverter", "Database exported to JSON: $filePath")
-                //return@withContext file
             } catch (e: Exception) {
                 Log.e("DatabaseToJsonConverter", "Error exporting database to JSON", e)
             }
