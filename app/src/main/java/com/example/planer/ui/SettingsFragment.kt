@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -57,11 +58,33 @@ class SettingsFragment : Fragment() {
         }
 
         binding.btnExport.setOnClickListener {
-            export()
+            val builder = AlertDialog.Builder(requireContext())
+            builder
+                .setTitle("Plan exportieren")
+                .setMessage("Sind Sie sicher, dass Sie den Plan exportieren möchten?")
+                .setNegativeButton("Abbrechen") { dialog, which ->
+                    dialog.cancel()
+                }
+                .setPositiveButton("Export") { dialog, which ->
+                    export()
+                }
+            val dialog = builder.create()
+            dialog.show()
         }
 
         binding.btnImport.setOnClickListener {
-            import()
+            val builder = AlertDialog.Builder(requireContext())
+            builder
+                .setTitle("Plan importieren")
+                .setMessage("Sind Sie sicher, dass Sie den Plan importieren möchten?")
+                .setNegativeButton("Abbrechen") { dialog, which ->
+                    dialog.cancel()
+                }
+                .setPositiveButton("Import") { dialog, which ->
+                    import()
+                }
+            val dialog = builder.create()
+            dialog.show()
         }
     }
 

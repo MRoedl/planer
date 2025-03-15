@@ -272,10 +272,9 @@ class MainActivity : AppCompatActivity() {
             val tomorrowStartOfDayInstant = tomorrowStartOfDay.toInstant()
 
             // 5. Instant in Unix-Timestamp umwandeln
-            val timestamp = tomorrowStartOfDayInstant.epochSecond
+            val timestamp = tomorrowStartOfDayInstant.toEpochMilli()
 
             planerDao.deleteMealPlanByMinDate(timestamp)
-            updateAllLastEaten()
             calcMealPlan()
 
             //reload
@@ -299,17 +298,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     //todo testen, optimieren (reset / update)
-    fun updateAllLastEaten() {
+    suspend fun updateAllLastEaten() {
         val planerDao: PlanerDao = PlanerDatabase.getDatabase(this).planerDao()
 
-        lifecycleScope.launch {
-            val mealsPlanLastEaten = planerDao.getLastEaten()
-            planerDao.resetLastEaten()
+        val mealsPlanLastEaten = planerDao.getLastEaten()
+        planerDao.resetLastEaten()
 
-            for (mealPlan in mealsPlanLastEaten) {
-                planerDao.updateLastEaten(mealPlan.date, mealPlan.meal)
-                Log.d("NACHRICHT", "Last eaten: ${mealPlan.date}")
-            }
+        for (mealPlan in mealsPlanLastEaten) {
+            planerDao.updateLastEaten(mealPlan.date, mealPlan.meal)
+            Log.d("NACHRICHT", "Last eaten: ${mealPlan.date}")
         }
     }
 

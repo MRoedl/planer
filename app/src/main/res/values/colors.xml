@@ -12,6 +12,8 @@
     <color name="iconEdit">#C8C8C8</color>
     <color name="iconDelete">#B40000</color>
     <color name="iconSwap">#C8C8C8</color>
+    <color name="iconImport">#C8C8C8</color>
+    <color name="iconExport">#C8C8C8</color>
     <color name="transparent">#00000000</color>
     <color name="text">#00C3C3C3</color>
     <color name="c1">#3DA8F5</color>
