@@ -120,7 +120,4 @@ interface PlanerDao {
 
     @Query("DELETE FROM mealPlan_table WHERE date > :date")
     suspend fun deleteMealPlanByMinDate(date: Long)
-
-//    @Query("DELETE FROM SQLITE_SEQUENCE WHERE name='mealPlan_table'")
-//    suspend fun resetAutoIncrement()
 }

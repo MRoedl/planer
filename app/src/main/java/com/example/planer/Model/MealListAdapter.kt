@@ -1,22 +1,11 @@
-import android.util.Log
+package com.example.planer.Model
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageButton
-import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.planer.Model.DynamicItem
 import com.example.planer.R
-import com.example.planer.database.MealEntity
-import com.example.planer.ui.HomeFragment
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlin.collections.addAll
-import kotlin.text.clear
 
-class MealListAdapter(private val items: List<DynamicItem>) :
-    RecyclerView.Adapter<DynamicViewHolder>() {
+class MealListAdapter(private val items: List<DynamicItem>) : RecyclerView.Adapter<DynamicViewHolder>() {
 
     // 1. Interface definieren
     interface OnMealClickListener {
@@ -68,19 +57,6 @@ class MealListAdapter(private val items: List<DynamicItem>) :
                 mealPlanHolder.deleteButton.setOnClickListener { btn ->
                     onMealClickListener?.onMealClick(btn.tag as Long, true)
                 }
-
-//                binding.container.findViewById<ImageButton>(btnEdit.id).setOnClickListener { btn ->
-//                    viewModel.mealId = btn.tag as Long
-//                    findNavController().navigate(R.id.action_MealListFragment_to_EditMealFragment)
-//                }
-//
-//                binding.container.findViewById<ImageButton>(btnDel.id).setOnClickListener { btn ->
-//                    lifecycleScope.launch {
-//                        planerDao.deleteMealById(btn.tag as Long)
-//                        findNavController().navigate(R.id.action_MealListFragment_to_self)
-//                    }
-//                }
-
             }
             is DynamicItem.MealPlanItem -> {
                 val mealPlanHolder = holder as DynamicViewHolder.MealPlanViewHolder
@@ -96,11 +72,8 @@ class MealListAdapter(private val items: List<DynamicItem>) :
                 mealPlanHolder.imageButton.setOnClickListener { btn ->
                     onMealClickListener?.onMealClick(btn.tag as Long, null)
                 }
-                
             }
-
         }
-
     }
 
     override fun getItemCount(): Int = items.size
