@@ -1,19 +1,10 @@
-import android.util.Log
+package com.example.planer.Model
+
+import androidx.recyclerview.widget.RecyclerView
+import DynamicViewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageButton
-import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import com.example.planer.Model.DynamicItem
 import com.example.planer.R
-import com.example.planer.database.MealEntity
-import com.example.planer.ui.HomeFragment
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlin.collections.addAll
-import kotlin.text.clear
 
 class MealListAdapter(private val items: List<DynamicItem>) :
     RecyclerView.Adapter<DynamicViewHolder>() {
