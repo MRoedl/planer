@@ -8,7 +8,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.planer.ViewModel.AppDataStore
-import com.example.planer.ViewModel.MealViewModel
 import com.example.planer.database.JsonConverter
 import com.example.planer.database.PlanerDatabase
 import com.example.planer.databinding.FragmentSettingsBinding
@@ -25,6 +24,7 @@ class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+    private lateinit var filepath: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +38,8 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val appDataStore = AppDataStore.getInstance(requireContext())
+
+        filepath = requireContext().filesDir.absolutePath
 
         lifecycleScope.launch {
             appDataStore.getDaysToPlan().collect {
@@ -65,10 +67,11 @@ class SettingsFragment : Fragment() {
 
     fun import() {
         val ftpmanager = FtpManager()
+
         lifecycleScope.launch {
             ftpmanager.connect()
 
-            val deviceFilePath = MealViewModel().filePath + "/db2.json"
+            val deviceFilePath = "$filepath/db2.json"
             val file = File(deviceFilePath)
             val serverFilePath = "/Dokumente/db.json"
             val success = ftpmanager.downloadFile(serverFilePath, file)
@@ -91,7 +94,7 @@ class SettingsFragment : Fragment() {
             //todo
             ftpmanager.connect()
 
-            val deviceFilePath = MealViewModel().filePath + "/db.json"
+            val deviceFilePath = "$filepath/db.json"
             val file = JsonConverter().exportDatabaseToJson(PlanerDatabase.getDatabase(requireContext()), deviceFilePath)
             //todo abfrage
             val serverFilePath = "/Dokumente/db.json"

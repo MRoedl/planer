@@ -29,9 +29,10 @@ class JsonConverter() {
                 val mealPlansJson = gson.toJson(mealPlans)
 
                 // JSON in Datei schreiben
+                val jsonString = "{\"meals\": $mealsJson, \"mealPlans\": $mealPlansJson}"
                 file = File(filePath)
                 FileWriter(file).use { writer ->
-                    writer.write("{\"meals\": $mealsJson, \"mealPlans\": $mealPlansJson}")
+                    writer.write(jsonString)
                 }
 
                 Log.d("DatabaseToJsonConverter", "Database exported to JSON: $filePath")
@@ -48,7 +49,7 @@ class JsonConverter() {
             try {
                 // JSON aus Datei lesen
                 val file = File(filePath)
-                val jsonString = FileReader(file).readText()
+                val jsonString = FileReader(file).readText() + "}"
 
                 // JSON in Daten umwandeln
                 val jsonObject = gson.fromJson(jsonString, Map::class.java)

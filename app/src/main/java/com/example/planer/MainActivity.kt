@@ -14,7 +14,6 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.room.Room
 import com.example.planer.ViewModel.AppDataStore
-import com.example.planer.ViewModel.MealViewModel
 import com.example.planer.database.MealEntity
 import com.example.planer.database.MealPlanEntity
 import com.example.planer.database.PlanerDao
@@ -49,8 +48,6 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         calcMealPlan()
-
-        MealViewModel().filePath = this@MainActivity.filesDir.absolutePath
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
