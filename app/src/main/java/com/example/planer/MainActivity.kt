@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var insertMealPlan: kotlinx.coroutines.Job
     lateinit var loadSettingsJob: kotlinx.coroutines.Job
     private var daysToPlan: Int = 7
+    private var factorToMultiplyPopularity: Int = 7
 
     //todo sync mit anderen Geräten
 
@@ -115,12 +116,19 @@ class MainActivity : AppCompatActivity() {
         val appDataStore = AppDataStore.getInstance(this)
 
         val days = appDataStore.getDaysToPlan().first()
-
         if (days == null || days <= 0) {
-            appDataStore.setDaysToPlan(7)
             daysToPlan = 7
+            appDataStore.setDaysToPlan(daysToPlan)
         } else {
             daysToPlan = days.toInt()
+        }
+
+        val factor = appDataStore.getFactorToMultiplyPopularity().first()
+        if (factor == null || factor <= 0) {
+            factorToMultiplyPopularity = 5
+            appDataStore.setFactorToMultiplyPopularity(factorToMultiplyPopularity)
+        } else {
+            factorToMultiplyPopularity = factor.toInt()
         }
     }
 
@@ -180,7 +188,7 @@ class MainActivity : AppCompatActivity() {
                     popularity = meal.popularity
                     meal.lastEaten?.let {
                         if (it <= (current.timeInMillis - 86400000 * 4)) {
-                            popularityToAdd += 5 * (((current.timeInMillis - it) / 86400000).toInt() - 4)
+                            popularityToAdd += factorToMultiplyPopularity * (((current.timeInMillis - it) / 86400000).toInt() - 4)
                         }
                     }
                     if (popularityToAdd < 0) popularityToAdd = 0

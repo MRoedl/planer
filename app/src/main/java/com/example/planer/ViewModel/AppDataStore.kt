@@ -21,6 +21,7 @@ class AppDataStore private constructor(private val context: Context) {
     companion object {
         val DARK_MODE = booleanPreferencesKey("dark_mode")
         val DAYS_TO_PLAN = intPreferencesKey("days_to_plan")
+        val FACTOR_TO_MULTIPLY_POPULARITY = intPreferencesKey("factor_to_multiply_popularity")
 
         @SuppressLint("StaticFieldLeak")
         @Volatile
@@ -44,6 +45,20 @@ class AppDataStore private constructor(private val context: Context) {
     fun isDarkMode(): Flow<Boolean> {
         return context.dataStore.data.map { settings ->
             settings[DARK_MODE] ?: false
+        }
+    }
+
+    // FACTOR_TO_MULTIPLY_POPULARITY setzen
+    suspend fun setFactorToMultiplyPopularity(factorToMultiplyPopularity: Int) {
+        context.dataStore.edit { settings ->
+            settings[FACTOR_TO_MULTIPLY_POPULARITY] = factorToMultiplyPopularity
+        }
+    }
+
+    // FACTOR_TO_MULTIPLY_POPULARITY abrufen
+    fun getFactorToMultiplyPopularity(): Flow<Int?> {
+        return context.dataStore.data.map { settings ->
+            settings[FACTOR_TO_MULTIPLY_POPULARITY]
         }
     }
 

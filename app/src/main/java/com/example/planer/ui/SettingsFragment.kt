@@ -48,11 +48,26 @@ class SettingsFragment : Fragment() {
             }
         }
 
+        lifecycleScope.launch {
+            appDataStore.getFactorToMultiplyPopularity().collect {
+                binding.eTFactor.setText(it.toString())
+            }
+        }
+
         binding.editTextDaysToPlan.doAfterTextChanged { editText ->
             val daysToPlan = editText.toString().toIntOrNull()
             if (daysToPlan != null) {
                 lifecycleScope.launch {
                     appDataStore.setDaysToPlan(daysToPlan)
+                }
+            }
+        }
+
+        binding.eTFactor.doAfterTextChanged { editText ->
+            val factor = editText.toString().toIntOrNull()
+            if (factor != null) {
+                lifecycleScope.launch {
+                    appDataStore.setFactorToMultiplyPopularity(factor)
                 }
             }
         }
