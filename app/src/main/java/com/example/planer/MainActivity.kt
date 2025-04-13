@@ -174,14 +174,17 @@ class MainActivity : AppCompatActivity() {
                 var sumPopularity = 0
                 var countMeals = 0
                 var popularity = 0
+                var popularityToAdd = 0
 
                 for (meal in meals) {
                     popularity = meal.popularity
                     meal.lastEaten?.let {
                         if (it <= (current.timeInMillis - 86400000 * 4)) {
-                            popularity += 10 * ((current.timeInMillis - it) / 86400000).toInt()
+                            popularityToAdd += 5 * (((current.timeInMillis - it) / 86400000).toInt() - 4)
                         }
                     }
+                    if (popularityToAdd < 0) popularityToAdd = 0
+
                     sumPopularity += popularity
                     mealsToChoiceFrom.put(sumPopularity, meal)
 
