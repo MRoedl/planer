@@ -1,6 +1,7 @@
 package com.example.planer.ftp
 
 import android.util.Log
+import com.example.planer.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.net.ftp.FTP
@@ -11,10 +12,10 @@ import java.io.FileOutputStream
 
 class FtpManager {
     private val ftpClient = FTPClient()
-    private val server = "192.168.178.1"
-    private val port = 21
-    private val user = "ftpuser"
-    private val pass = "61*1NcQG%eat"
+    private val server = BuildConfig.FTP_SERVER
+    private val port = BuildConfig.FTP_PORT.toInt()
+    private val user = BuildConfig.FTP_USER
+    private val pass = BuildConfig.FTP_PASSWORD
 
     suspend fun connect(): Boolean = withContext(Dispatchers.IO) {
         return@withContext try {
