@@ -8,14 +8,15 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
 }
 
-val localProperties = Properties().apply {
-    val localPropertiesFile = file("config.properties")
-    if (localPropertiesFile.exists()) {
-        load(localPropertiesFile.inputStream())
-    }
-}
 
 allprojects {
+    val localProperties = Properties().apply {
+        val localPropertiesFile = file("config.properties")
+        if (localPropertiesFile.exists()) {
+            load(localPropertiesFile.inputStream())
+        }
+    }
+
     extra.set("ftpServer", localProperties.getProperty("ftp.server"))
     extra.set("ftpPort", localProperties.getProperty("ftp.port"))
     extra.set("ftpUser", localProperties.getProperty("ftp.user"))

@@ -42,10 +42,10 @@ android {
     defaultConfig {
         // ...
 
-        buildConfigField("String", "FTP_SERVER", "\"${project.extra["ftpServer"]}\"")
-        buildConfigField("String", "FTP_PORT", "\"${project.extra["ftpPort"]}\"")
-        buildConfigField("String", "FTP_USER", "\"${project.extra["ftpUser"]}\"")
-        buildConfigField("String", "FTP_PASSWORD", "\"${project.extra["ftpPassword"]}\"")
+        buildConfigField("String", "FTP_SERVER", project.extra["ftpServer"].toString())
+        buildConfigField("String", "FTP_PORT", project.extra["ftpPort"].toString())
+        buildConfigField("String", "FTP_USER", project.extra["ftpUser"].toString())
+        buildConfigField("String", "FTP_PASSWORD", project.extra["ftpPassword"].toString())
     }
 }
 
